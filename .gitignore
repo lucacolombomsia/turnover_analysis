@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 
+.DS_Store
+documents/
+
 # C extensions
 *.so
 
