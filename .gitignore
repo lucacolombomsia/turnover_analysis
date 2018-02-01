@@ -1,7 +1,13 @@
+*.Rhistory
+*.Rproj
+
 .DS_Store
 
 .env
 app/__pycache__/
+develop/src/__pycache__/
+develop/notebooks/__pycache__/
 
 # Jupyter NB Checkpoints
 .ipynb_checkpoints/
+.Rproj.user
