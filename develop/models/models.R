@@ -21,39 +21,61 @@ n.models = 1 #number of different models to fit and compare
 n=nrow(emp)
 y<-emp$left
 
-yhat=matrix(0,n,n.models)
-MSE<-matrix(0,Nrep,n.models)
+set.seed(123)
+AUC <- matrix(0, Nrep, n.models)
+p_star <- matrix(0, Nrep, n.models)
+SS_star <- matrix(0, Nrep, n.models)
 for (j in 1:Nrep) {
+  yhat=rep(0,n)
   Ind<-CVInd(n,K)
   for (k in 1:K) {
-    out<-glm(left~., data = emp[-Ind[[k]],], family = binomial) #the first model to compare
-    yhat[Ind[[k]],1]<-as.numeric(predict(out,emp[Ind[[k]],]))
-  } #end of k loop
-  MSE[j,]=apply(yhat,2,function(x) sum((y-x)^2))/n
-} #end of j loop
-MSE
-MSEAve<- apply(MSE,2,mean); MSEAve #averaged mean square CV error
-MSEsd <- apply(MSE,2,sd); MSEsd   #SD of mean square CV error
-
-yhat=rep(0,n)
-#CCR<-matrix(0,Nrep,n.models)
-for (j in 1:Nrep) {
-  Ind<-CVInd(n,K)
-  for (k in 1:K) {
-    out<-glm(left~., data = emp[-Ind[[k]],], family = binomial) #the first model to compare
+    out<-glm(left~., data = emp[-Ind[[k]],], family = binomial)
     yhat[Ind[[k]]]<-as.numeric(predict(out,emp[Ind[[k]],], type = "response"))
-  } #end of k loop
-  CCR[j,]=apply(yhat,2,function(x) sum((y-x)^2))/n
+  }
+  #get CV AUC
+  roc_obj <- roc(y, yhat)
+  AUC[j,1] <- auc(roc_obj)
+  x = roc_obj$sensitivities + roc_obj$specificities
+  p_star[j,1] = roc_obj$thresholds[which(x == max(x))]
+  SS_star[j,1] = x[which(x == max(x))]
 } #end of j loop
+mean(AUC) #0.8200388
+mean(p_star) # 0.2608738
+mean(SS_star) #1.498719
 
-roc_obj <- roc(y, yhat)
+fit <- glm(left~., data = emp, family = binomial)
+summary(fit)
+pred <- predict(fit,emp, type = "response")
+roc_obj <- roc(emp$left, pred)
 auc(roc_obj)
-roc_obj$thresholds[which.max(roc_obj$sensitivities + roc_obj$specificities)]
-names(roc_obj)
+x = roc_obj$sensitivities + roc_obj$specificities
+roc_obj$thresholds[which(x == max(x))]
+x[which(x == max(x))]
 
-#cv_predictions <- data.frame(y = emp$left, yhat = yhat)
-tab=table(emp$left, yhat>.45)
-tab    
-CCR=sum(diag(tab))/sum(tab)
-CCR
+# #find optimal p* from CCR
+# results <- c()
+# for (x in seq(0.35, 0.65, by = 0.01)) {
+#   tab <- table(emp$left, yhat>x)
+#   CCR <- sum(diag(tab))/sum(tab)
+#   results <- c(results, CCR)
+# }
+# df <- data.frame(p = seq(0.35, 0.65, by = 0.01), ccr = results)
+
+
+
+
+##################
+# yhat=matrix(0,n,n.models)
+# MSE<-matrix(0,Nrep,n.models)
+# for (j in 1:Nrep) {
+#   Ind<-CVInd(n,K)
+#   for (k in 1:K) {
+#     out<-glm(left~., data = emp[-Ind[[k]],], family = binomial) #the first model to compare
+#     yhat[Ind[[k]],1]<-as.numeric(predict(out,emp[Ind[[k]],]))
+#   } #end of k loop
+#   MSE[j,]=apply(yhat,2,function(x) sum((y-x)^2))/n
+# } #end of j loop
+# MSE
+# MSEAve<- apply(MSE,2,mean); MSEAve #averaged mean square CV error
+# MSEsd <- apply(MSE,2,sd); MSEsd   #SD of mean square CV error
 
