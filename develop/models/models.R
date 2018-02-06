@@ -51,6 +51,8 @@ auc(roc_obj)
 x = roc_obj$sensitivities + roc_obj$specificities
 roc_obj$thresholds[which(x == max(x))]
 x[which(x == max(x))]
+tab <- table(emp$left, pred>.23)
+tab
 
 # #find optimal p* from CCR
 # results <- c()
