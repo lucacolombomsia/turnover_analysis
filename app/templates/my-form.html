@@ -4,21 +4,21 @@
 
 <p>Enter values in the fields, then click "Submit":</p>
 
-<form id="form">
+<form method="POST">
   Satisfaction Level: <input name="satisfaction"><br>
   Last Evaluation: <input name="evaluation"><br>
   Number of projects: <input name="projects"><br>
   Average monthly hours: <input name="hours"><br>
   Tenure: <input name="tenure"><br>
-  Work accident: <select id="accident">
+  Work accident: <select name="accident">
                    <option>Yes</option>
                    <option>No</option>
                  </select><br>
-  Promotion in the last 5 years: <select id="promotion">
+  Promotion in the last 5 years: <select name="promotion">
                                    <option>Yes</option>
                                    <option>No</option>
                                  </select><br>
-  Department: <select id="department">
+  Department: <select name="department">
                 <option>Accounting</option>
                 <option>HR</option>
                 <option>IT</option>
@@ -30,29 +30,13 @@
                 <option>Support</option>
                 <option>Technical</option>
               </select><br>
-  Salary: <select id="salary">
+  Salary: <select name="salary">
             <option>High</option>
             <option>Medium</option>
             <option>Low</option>
           </select><br><br>
+  <input type="submit" value="Submit">		  
 </form>
-
-<button onclick="myFunction()">Submit</button>
-
-<p id="demo"></p>
-
-<script>
-function myFunction() {
-    var x = document.getElementById("form");
-    var text = x.elements[0].value;
-    var i;
-    for (i = 1; i < x.length ;i++) {
-        text += "," + x.elements[i].value;
-    }
-	text
-    document.getElementById("demo").innerHTML = text;
-}
-</script>
 
 </body>
 </html>
