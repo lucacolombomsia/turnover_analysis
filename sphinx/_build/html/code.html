@@ -47,6 +47,32 @@
 <dd><p>Reads the training data from csv and writes it to employees table in database</p>
 </dd></dl>
 
+<span class="target" id="module-model"></span><dl class="function">
+<dt id="model.fit_model_pickle">
+<code class="descclassname">model.</code><code class="descname">fit_model_pickle</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#model.fit_model_pickle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a tuple with X matrix and Y vector as input. Fits a logistic regression on them.
+Then pickles the model for future use.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>tuple</em>) – tuple with X matrix and Y vector for model fitting.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.read_data">
+<code class="descclassname">model.</code><code class="descname">read_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model.read_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the data from the employees table in the DB. Preprocesses data for model fitting.
+Returns a tuple with the X matrix and Y vector (in that order).</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>tuple: A tuple with the X matrix and the Y vector.</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
