@@ -56,7 +56,7 @@ Then pickles the model for future use.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>tuple</em>) – tuple with X matrix and Y vector for model fitting.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>tuple</em>) – Tuple with X matrix and Y vector for model fitting.</td>
 </tr>
 </tbody>
 </table>
@@ -67,10 +67,35 @@ Then pickles the model for future use.</p>
 <code class="descclassname">model.</code><code class="descname">read_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model.read_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads the data from the employees table in the DB. Preprocesses data for model fitting.
 Returns a tuple with the X matrix and Y vector (in that order).</p>
-<dl class="docutils">
-<dt>Returns:</dt>
-<dd>tuple: A tuple with the X matrix and the Y vector.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A tuple with the X matrix and the Y vector.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="module-preprocess"></span><dl class="function">
+<dt id="preprocess.preprocess">
+<code class="descclassname">preprocess.</code><code class="descname">preprocess</code><span class="sig-paren">(</span><em>a_orig</em><span class="sig-paren">)</span><a class="headerlink" href="#preprocess.preprocess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocesses the user input that was inputted in the form in the flask app.
+The output contains all the dummies that are needed for the data to be used for prediction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a_orig</strong> (<em>list</em>) – A list with the user input read from the form.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list with the processed data.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

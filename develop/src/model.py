@@ -27,8 +27,8 @@ def fit_model_pickle(data):
     Takes a tuple with X matrix and Y vector as input. Fits a logistic regression on them.
     Then pickles the model for future use.
 
-    :type data: tuple
-    :param data: tuple with X matrix and Y vector for model fitting.
+    Args:
+        data (tuple): Tuple with X matrix and Y vector for model fitting.
     """
     X = data[0]
     y = data[1]
