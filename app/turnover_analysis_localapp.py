@@ -1,4 +1,10 @@
 from flask import Flask, render_template, request
+import os, sys
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.append('../develop')
+from src import preprocess
+
+
 
 app = Flask(__name__)
 
@@ -12,7 +18,7 @@ def my_form():
 
 @app.route('/inputs', methods=['POST'])
 def my_form_post():
-    x = [1] + [float(request.form['satisfaction'])]
+    x = [float(request.form['satisfaction'])]
     x += [float(request.form['evaluation'])]
     x += [float(request.form['projects'])]
     x += [float(request.form['hours'])]
@@ -21,6 +27,7 @@ def my_form_post():
     x += [request.form.get('promotion')]
     x += [request.form.get('department')]
     x += [request.form.get('salary')]
+    x = preprocess.preprocess(x)
     y = [str(n) for n in x]
     return str(','.join(y))
 
