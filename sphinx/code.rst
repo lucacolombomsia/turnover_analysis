@@ -7,4 +7,4 @@ Data ingestion and model fitting
 .. automodule:: model
    :members:
 .. automodule:: preprocess
-      :members:
+   :members:

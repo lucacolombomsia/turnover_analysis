@@ -15,11 +15,14 @@ def read_data():
     engine = create_engine(config.database_config)
     emp = pd.read_sql_query("select * from employees", con = engine)
     y = emp['left']
-    emp = emp.drop('left', axis=1)
     emp.sales = emp.sales.str.lower()
+    #create dummies for categorical variables
     emp = emp.join(pd.get_dummies(emp["sales"], prefix="dept"))
     emp = emp.join(pd.get_dummies(emp["salary"], prefix="salary"))
-    emp = emp.drop(["empID", "salary_high", "dept_accounting", "sales", "salary"], axis = 1)
+    #drop variables that should not be in the X matrix
+    #these include: target, employer ID, categorical vars and
+    #one dummy per category (to avoid perfect multicollinearity)
+    emp = emp.drop(["left", "empID", "salary_high", "dept_accounting", "sales", "salary"], axis = 1)
     return (emp, y)
 
 def fit_model_pickle(data):
@@ -30,8 +33,10 @@ def fit_model_pickle(data):
     Args:
         data (tuple): Tuple with X matrix and Y vector for model fitting.
     """
+    #prepare data
     X = data[0]
     y = data[1]
+    #fit model
     logreg = LogisticRegression()
     logreg.fit(X, y)
     #pickle the model

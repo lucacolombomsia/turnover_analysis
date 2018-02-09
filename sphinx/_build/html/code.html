@@ -82,8 +82,10 @@ Returns a tuple with the X matrix and Y vector (in that order).</p>
 <span class="target" id="module-preprocess"></span><dl class="function">
 <dt id="preprocess.preprocess">
 <code class="descclassname">preprocess.</code><code class="descname">preprocess</code><span class="sig-paren">(</span><em>a_orig</em><span class="sig-paren">)</span><a class="headerlink" href="#preprocess.preprocess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Preprocesses the user input that was inputted in the form in the flask app.
-The output contains all the dummies that are needed for the data to be used for prediction.</p>
+<dd><p>Preprocesses the data -inputted by the user - that was read from the form in the flask app.
+The model was fit using scikit learn, so categorical variables need to be transformed into dummies
+for the user input to be used for prediction.
+The output of this function contains all necessary dummies, so it can be used for prediction.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
