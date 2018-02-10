@@ -6,8 +6,8 @@ import pickle
 
 def read_data():
     """
-    Reads the data from the employees table in the DB. Preprocesses data for model fitting.
-    Returns a tuple with the X matrix and Y vector (in that order).
+    Reads the data from the employees table in the DB. Then preprocesses data for model fitting and 
+    returns a tuple with the X matrix and Y vector (in that order).
 
     Returns:
         tuple: A tuple with the X matrix and the Y vector.

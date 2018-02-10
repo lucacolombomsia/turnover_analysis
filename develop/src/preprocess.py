@@ -1,9 +1,11 @@
 def preprocess(a_orig):
-    """
-    Preprocesses the data -inputted by the user - that was read from the form in the flask app.
+    """ Preprocesses data inputted by the user in the flask app.   
+    
+    The user inputs data in the form on the flask app. The data is then read and must be preprocessed before
+    being used for prediction.
     The model was fit using scikit learn, so categorical variables need to be transformed into dummies
     for the user input to be used for prediction.
-    The output of this function contains all necessary dummies, so it can be used for prediction.
+    The output of this function contains all necessary dummies and is ready to be fed into the model.
 
     Args:
         a_orig (list): A list with the user input read from the form.

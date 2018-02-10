@@ -65,8 +65,8 @@ Then pickles the model for future use.</p>
 <dl class="function">
 <dt id="model.read_data">
 <code class="descclassname">model.</code><code class="descname">read_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model.read_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads the data from the employees table in the DB. Preprocesses data for model fitting.
-Returns a tuple with the X matrix and Y vector (in that order).</p>
+<dd><p>Reads the data from the employees table in the DB. Then preprocesses data for model fitting and
+returns a tuple with the X matrix and Y vector (in that order).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -82,10 +82,12 @@ Returns a tuple with the X matrix and Y vector (in that order).</p>
 <span class="target" id="module-preprocess"></span><dl class="function">
 <dt id="preprocess.preprocess">
 <code class="descclassname">preprocess.</code><code class="descname">preprocess</code><span class="sig-paren">(</span><em>a_orig</em><span class="sig-paren">)</span><a class="headerlink" href="#preprocess.preprocess" title="Permalink to this definition">¶</a></dt>
-<dd><p>Preprocesses the data -inputted by the user - that was read from the form in the flask app.
+<dd><p>Preprocesses data inputted by the user in the flask app.</p>
+<p>The user inputs data in the form on the flask app. The data is then read and must be preprocessed before
+being used for prediction.
 The model was fit using scikit learn, so categorical variables need to be transformed into dummies
 for the user input to be used for prediction.
-The output of this function contains all necessary dummies, so it can be used for prediction.</p>
+The output of this function contains all necessary dummies and is ready to be fed into the model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
