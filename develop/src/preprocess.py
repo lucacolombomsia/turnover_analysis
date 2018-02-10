@@ -42,4 +42,6 @@ def preprocess(a_orig):
     #High is the reference category, so no dummy for it (to avoid perfect multicollinearity)
     if (a_orig[8]!="High"):
         a[salary_dict[a_orig[8]]] = 1
+    a += [a[6]*a[3]]
+    a += [a[6]*a[4]]
     return a
