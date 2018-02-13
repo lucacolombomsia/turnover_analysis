@@ -1,5 +1,7 @@
 turnover/
 
+develop/src/secret_config.py
+
 *.csv
 *.Rhistory
 *.Rproj
