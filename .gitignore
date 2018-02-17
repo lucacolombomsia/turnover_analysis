@@ -9,9 +9,7 @@ develop/src/secret_config.py
 .DS_Store
 
 .env
-app/__pycache__/
-develop/src/__pycache__/
-develop/notebooks/__pycache__/
+*.pyc
 
 # Jupyter NB Checkpoints
 .ipynb_checkpoints/

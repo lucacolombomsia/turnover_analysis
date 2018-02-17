@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Title</h1>
+	<div>Enter values in the fields, then click "Submit"</div>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.satisfaction.label }}
+            {{ form.satisfaction(size=25, placeholder="Number between 0 and 1") }}<br>
+            {% for error in form.satisfaction.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.evaluation.label }}
+            {{ form.evaluation(size=25, placeholder="Number between 0 and 1") }}<br>
+            {% for error in form.evaluation.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.projects.label }}
+            {{ form.projects(size=5) }}<br>
+            {% for error in form.projects.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.hours.label }}
+            {{ form.hours(size=5) }}<br>
+            {% for error in form.hours.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.tenure.label }}
+            {{ form.tenure(size=5) }}<br>
+            {% for error in form.tenure.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.accident.label }} {{ form.accident() }}<br>
+        </p>
+        <p>
+            {{ form.promotion.label }} {{ form.promotion() }}<br>
+        </p>
+        <p>
+            {{ form.department.label }}<br>
+            {{ form.department(size=10) }}<br>
+            {% for error in form.department.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.salary.label }}<br>
+            {{ form.salary(size=3) }}<br>
+            {% for error in form.salary.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
