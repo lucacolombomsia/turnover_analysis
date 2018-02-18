@@ -1,33 +1,12 @@
-import config
 import pandas as pd
-from sqlalchemy import create_engine
 from sklearn.linear_model import LogisticRegression
 import pickle
+import os, sys
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.append('../')
+from src import read_data, preprocess_for_sklearn
 
-def read_data():
-    """
-    Reads the data from the employees table in the DB. Then preprocesses data for model fitting and 
-    returns a tuple with the X matrix and Y vector (in that order).
-
-    Returns:
-        tuple: A tuple with the X matrix and the Y vector.
-    """
-    engine = create_engine(config.database_config)
-    emp = pd.read_sql_query("select * from employees_hist_data", con = engine)
-    y = emp['left']
-    emp.sales = emp.sales.str.lower()
-    #create dummies for categorical variables
-    emp = emp.join(pd.get_dummies(emp["sales"], prefix="dept"))
-    emp = emp.join(pd.get_dummies(emp["salary"], prefix="salary"))
-    #drop variables that should not be in the X matrix
-    #these include: target, employer ID, categorical vars and
-    #one dummy per category (to avoid perfect multicollinearity)
-    emp = emp.drop(["left", "empID", "salary_high", "dept_accounting", "sales", "salary"], axis = 1)
-    emp["interaction_promotion_hours"] = emp.promotion_last_5years * emp.average_montly_hours
-    emp["interaction_promotion_tenure"] = emp.promotion_last_5years * emp.time_spend_company
-    return (emp, y)
-
-def fit_model_pickle(data):
+def fit_model(data):
     """
     Takes a tuple with X matrix and Y vector as input. Fits a logistic regression on them.
     Then pickles the model for future use.
@@ -41,12 +20,18 @@ def fit_model_pickle(data):
     #fit model
     logreg = LogisticRegression()
     logreg.fit(X, y)
-    #pickle the model
+    return logreg
+
+def pickle_model(model):
+    """
+    Pickle the model
+    """
     pkl_filename = '../models/logistic.pkl'
     model_pkl = open(pkl_filename, 'wb')
-    pickle.dump(logreg, model_pkl)
+    pickle.dump(model, model_pkl)
     model_pkl.close()
 
 if __name__ == "__main__":
-    fit_model_pickle(read_data())
+    #fit_model_pickle(read_data())
+    pickle_model(fit_model(preprocess_for_sklearn(read_data("employees_hist_data"))))
 
