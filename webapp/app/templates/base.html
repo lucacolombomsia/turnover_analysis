@@ -1,11 +1,15 @@
 <html>
-    <head>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+	
+	<head>
       <title>Turnover Analysis web-app</title>
     </head>
+	
     <body>
         <div>Turnover Analysis: 
 			<a href="{{ url_for('index') }}">Home</a>
 			<a href="{{ url_for('login') }}">Login</a>
+			<a href="{{ url_for('table') }}">Table</a>
 		</div>
         <hr>
         {% with messages = get_flashed_messages() %}

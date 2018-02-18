@@ -1,7 +1,14 @@
 import pickle
 import numpy as np
+import os, sys
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.append('../develop/')
+sys.path.append('../develop/src')
+from src import read_data, preprocess_for_sklearn
+from sklearn.linear_model import LogisticRegression
+import pandas as pd
 
-def preprocess(entry1, entry2, entry3, entry4, entry5, entry6, entry7, entry8, entry9):
+def preprocess_form_data(entry1, entry2, entry3, entry4, entry5, entry6, entry7, entry8, entry9):
     """ Preprocesses data inputted by the user in the flask app.   
     
     The user inputs data in the form on the flask app. The data is then read and must be preprocessed before
@@ -40,3 +47,14 @@ def import_model():
     model = pickle.load(model_pkl)
     model_pkl.close()
     return model
+
+def make_predictions(table, model, n = 5):
+    data = read_data(table)
+    X_matrix = preprocess_for_sklearn(data)[0]
+    y_pred = pd.DataFrame({"phat" : model.predict_proba(X_matrix)[:,1]})
+    data = data.join(y_pred)
+    data = data.sort_values(by='phat', ascending = False)
+    return data.head(n)
+
+
+

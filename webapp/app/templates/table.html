@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div>
+	  <h1>{{n}} employees who are most likely to quit</h1>
+	  {% for table in tables %}
+	    {{ table|safe }}
+	  {% endfor %}
+	</div>
+{% endblock %}
