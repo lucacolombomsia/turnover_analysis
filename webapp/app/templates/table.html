@@ -2,7 +2,8 @@
 
 {% block content %}
 	<div>
-	  <h1>{{n}} employees who are most likely to quit</h1>
+	  <h1>{{date}} Employee Evaluation</h1>
+	  <h2>The {{n}} employees who are most likely to quit</h1>
 	  {% for table in tables %}
 	    {{ table|safe }}
 	  {% endfor %}

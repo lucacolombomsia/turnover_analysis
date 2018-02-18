@@ -8,7 +8,8 @@ from src import read_data, preprocess_for_sklearn
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
 
-def preprocess_form_data(entry1, entry2, entry3, entry4, entry5, entry6, entry7, entry8, entry9):
+def preprocess_form_data(form):
+
     """ Preprocesses data inputted by the user in the flask app.   
     
     The user inputs data in the form on the flask app. The data is then read and must be preprocessed before
@@ -24,9 +25,18 @@ def preprocess_form_data(entry1, entry2, entry3, entry4, entry5, entry6, entry7,
         list: A list with the processed data.
     """
 
+    entry1 = form.satisfaction.data
+    entry2 = form.evaluation.data
+    entry3 = form.projects.data
+    entry4 = form.hours.data
+    entry5 = form.tenure.data
+    entry6 = form.accident.data
+    entry7 = form.promotion.data
+    entry8 = form.department.data
+    entry9 = form.salary.data
+
     #keep only the first 7 elements (5 numerical variables + 2 binary variables)
-    mylist = [entry1, entry2, float(entry3), float(entry4),
-                float(entry5), int(entry6), int(entry7)]
+    mylist = [entry1, entry2, entry3, entry4, entry5, int(entry6), int(entry7)]
     #there are 10 possible categories (9 dummies) for the "department" variable
     #there are 3 possibile categories (2 dummies) for the "salary" variable
     #in total, 11 dummies ==> add 11 zeros, then will use dictionary to change the relevant dummy to 1

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import FloatField, IntegerField, BooleanField, SelectField, SubmitField
+from wtforms import FloatField, IntegerField, BooleanField, SelectField, SubmitField, DateField
 from wtforms.validators import DataRequired, NumberRange
 
 class LoginForm(FlaskForm):
@@ -32,4 +32,11 @@ class LoginForm(FlaskForm):
                  ('17', "Medium"),
                  ('drop', "High")],
         validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+class DatabaseForm(FlaskForm):
+    date = DateField('Month and year of last Employee Evaluation',
+        format='%Y-%m')
+    number = IntegerField('Number of results to display',
+        validators=[NumberRange(min=1, message="An integer larger than 0")])
     submit = SubmitField('Submit')
