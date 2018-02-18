@@ -24,14 +24,14 @@ def login():
 def table():
     form = DatabaseForm()
     if form.validate_on_submit():
-      num = form.number.data
-      date_str = form.date.data.strftime('%B %Y')
-      if form.date.data == dt.strptime('2018-01', '%Y-%m').date():
-        data = 'employees_eval_jan18'
-      if form.date.data == dt.strptime('2017-07', '%Y-%m').date():
-        data = 'employees_eval_jul17'
-      model = import_model()
-      pred_data = make_predictions(table = data, model = model, n = num)
-      return render_template('table.html', tables=[pred_data.to_html()],
+        num = form.number.data
+        date_str = form.date.data.strftime('%B %Y')
+        if form.date.data == dt.strptime('2018-01', '%Y-%m').date():
+            data = 'employees_eval_jan18'
+        if form.date.data == dt.strptime('2017-07', '%Y-%m').date():
+            data = 'employees_eval_jul17'
+        model = import_model()
+        pred_data = make_predictions(table = data, model = model, n = num)
+        return render_template('table.html', tables=[pred_data.to_html()],
                               date = date_str, n = num)
     return render_template('database_form.html', form = form)
