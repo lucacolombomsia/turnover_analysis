@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import FloatField, IntegerField, BooleanField, SelectField, SubmitField, DateField
-from wtforms.validators import DataRequired, NumberRange
+from wtforms.validators import DataRequired, NumberRange, StopValidation
+from datetime import datetime as dt
 
 class LoginForm(FlaskForm):
     satisfaction = FloatField('Satisfaction Level',
@@ -34,9 +35,14 @@ class LoginForm(FlaskForm):
         validators=[DataRequired()])
     submit = SubmitField('Submit')
 
+def validate_dates(form, field):
+        if (field.data != dt.strptime('2018-01', '%Y-%m').date() and 
+           field.data != dt.strptime('2017-07', '%Y-%m').date()):
+            raise StopValidation('No employee evaluation on this date')
+
 class DatabaseForm(FlaskForm):
     date = DateField('Month and year of last Employee Evaluation',
-        format='%Y-%m')
+        format='%Y-%m', validators=[validate_dates])
     number = IntegerField('Number of results to display',
         validators=[NumberRange(min=1, message="An integer larger than 0")])
     submit = SubmitField('Submit')
