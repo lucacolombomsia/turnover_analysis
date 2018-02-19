@@ -3,7 +3,7 @@ from wtforms import FloatField, IntegerField, BooleanField, SelectField, SubmitF
 from wtforms.validators import DataRequired, NumberRange, StopValidation
 from datetime import datetime as dt
 
-class LoginForm(FlaskForm):
+class PredictionForm(FlaskForm):
     satisfaction = FloatField('Satisfaction Level',
         validators=[DataRequired(), NumberRange(min=0, max=1)])
     evaluation = FloatField('Last Evaluation', 

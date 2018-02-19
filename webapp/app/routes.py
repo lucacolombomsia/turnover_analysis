@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for
 from app import app
-from app.forms import LoginForm, DatabaseForm
-from app.functions import preprocess_form_data, import_model, make_predictions, give_promotion, give_recommendation
+from app.forms import PredictionForm, DatabaseForm
+from app.functions import preprocess_prediction_form_data, import_model, make_predictions, give_promotion, give_recommendation
 from sklearn.linear_model import LogisticRegression
 from datetime import datetime as dt
 
@@ -10,11 +10,11 @@ from datetime import datetime as dt
 def index():
     return render_template('index.html')
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
+@app.route('/single_emp', methods=['GET', 'POST'])
+def single_emp():
+    form = PredictionForm()
     if form.validate_on_submit():
-        data = preprocess_form_data(form)
+        data = preprocess_prediction_form_data(form)
         model = import_model()
         y_pred = round(model.predict_proba(data)[0][1]*100, 2)
         text = give_recommendation(y_pred, model, data)

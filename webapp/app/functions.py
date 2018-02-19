@@ -8,7 +8,7 @@ from src import read_data, preprocess_for_sklearn
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
 
-def preprocess_form_data(form):
+def preprocess_prediction_form_data(form):
 
     """ Preprocesses data inputted by the user in the flask app.   
     

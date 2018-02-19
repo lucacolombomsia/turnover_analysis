@@ -1,26 +1,23 @@
+<!DOCTYPE html>
 <html>
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-	
+
 	<head>
-      <title>Turnover Analysis web-app</title>
-    </head>
-	
-    <body>
-        <div>Turnover Analysis: 
-			<a href="{{ url_for('index') }}">Home</a>
-			<a href="{{ url_for('login') }}">Login</a>
-			<a href="{{ url_for('table') }}">Table</a>
-		</div>
-        <hr>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
-    </body>
-</html>
+		<link rel="stylesheet" href="../static/style.css">
+		
+		<title>Turnover Analysis web-app</title>
+	</head>
+
+<body>
+
+<div class="topnav">
+  <a class="active" href="{{ url_for('index') }}">Home</a>
+  <a href="{{ url_for('single_emp') }}">Single employee</a>
+  <a href="{{ url_for('table') }}">Bulk load Employee Evaluation</a>
+</div>
+	</body>
+
+<div class="padding">
+{% block content %}{% endblock %}
+</div>	
+
+</html
