@@ -12,7 +12,11 @@
 		  <hr>
 
       		<div align="center">
-        		<h4>The employee will quit with a probability of {{perc}}%</h4>
+        		<h4>The employee will quit with a probability of {{perc}}%<br>
+			  	  {% for sentence in sentences %}
+			  	    {{ sentence }}<br>
+			  	  {% endfor %}
+				</h4>
       	    </div>
 
 		  <hr>

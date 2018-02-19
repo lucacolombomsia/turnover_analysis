@@ -31,6 +31,4 @@ def preprocess_for_sklearn(data):
         data = data.drop(["name"], axis = 1)
     except:
         pass
-    data["interaction_promotion_hours"] = data.promotion_last_5years * data.average_montly_hours
-    data["interaction_promotion_tenure"] = data.promotion_last_5years * data.time_spend_company
     return (data, y)

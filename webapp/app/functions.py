@@ -47,8 +47,6 @@ def preprocess_form_data(form):
     #High is the reference category, so no dummy for it (to avoid perfect multicollinearity)
     if (str(entry9)!="drop"):
         mylist[int(entry9)] = 1
-    mylist += [mylist[6]*mylist[3]]
-    mylist += [mylist[6]*mylist[4]]
     return np.array([mylist])
 
 def import_model():
@@ -58,13 +56,32 @@ def import_model():
     model_pkl.close()
     return model
 
-def make_predictions(table, model, n = 5):
-    data = read_data(table)
+def make_predictions(dbtable, model, n = 5):
+    data = read_data(dbtable)
     X_matrix = preprocess_for_sklearn(data)[0]
     y_pred = pd.DataFrame({"phat" : model.predict_proba(X_matrix)[:,1]})
     data = data.join(y_pred)
     data = data.sort_values(by='phat', ascending = False)
     return data.head(n)
 
+def give_promotion(data):
+    #set dummy on promotion equal to 1
+    data[0][6] = 1
+    #if salary is low, make it medium
+    if list(data[0][16:18]) == [1,0]:
+        data[0][16:18] = [0,1]
+    #if salary is medium, make it high
+    elif list(data[0][16:18]) == [0,1]:
+        data[0][16:18] = [0,0]
+    return data
 
-
+def give_recommendation(proba, model, data):
+    if proba > 25:
+        text = ["This guy will quit, watch out!"]
+        y_hat_prime = round(model.predict_proba(give_promotion(data))[0][1]*100, 2)
+        if proba != y_hat_prime:
+            text += ['''Offering a promotion to this employee would lower
+            the probability with which he will quit to {}%'''.format(y_hat_prime)]
+    else:
+        text = ["Nothing to worry about!"]
+    return text

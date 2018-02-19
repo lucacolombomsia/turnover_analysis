@@ -33,21 +33,24 @@ for (j in 1:Nrep) {
   Ind = CVInd(n,K)
   for (k in 1:K) {
     # model 1
-    out<-glm(left~., data = emp[-Ind[[k]],], family = binomial)
+    out<-glm(left~.
+             + promotion_last_5years*average_montly_hours
+             + promotion_last_5years*time_spend_company, data = emp[-Ind[[k]],], family = binomial)
     yhat[Ind[[k]],1]<-as.numeric(predict(out,emp[Ind[[k]],], type = "response"))
     yclass[Ind[[k]],1] <- yhat[Ind[[k]],1]>= .5
     
     #model 2
     out<-glm(left~.
              + promotion_last_5years*average_montly_hours
-             + promotion_last_5years*time_spend_company, data = emp[-Ind[[k]],], family = binomial)
+             + promotion_last_5years*time_spend_company
+             + promotion_last_5years*last_evaluation, data = emp[-Ind[[k]],], family = binomial)
     yhat[Ind[[k]],2]<-as.numeric(predict(out,emp[Ind[[k]],], type = "response"))
     yclass[Ind[[k]],2] <- yhat[Ind[[k]],2]>= .5
     
     #model 3
     out<-glm(left~.
-             + promotion_last_5years*number_project
-             + promotion_last_5years*time_spend_company, data = emp[-Ind[[k]],], family = binomial)
+             + promotion_last_5years*time_spend_company
+             + promotion_last_5years*last_evaluation, data = emp[-Ind[[k]],], family = binomial)
     yhat[Ind[[k]],3]<-as.numeric(predict(out,emp[Ind[[k]],], type = "response"))
     yclass[Ind[[k]],3] <- yhat[Ind[[k]],3]>= .5
   } #end of k loop
@@ -70,9 +73,12 @@ AUC_CV.ave
 #################################################
 ### Final model
 #################################################
+fit <- glm(left~., data = emp, family = binomial)
+
 fit <- glm(left~.
-           + promotion_last_5years*average_montly_hours
-           + promotion_last_5years*time_spend_company, data = emp, family = binomial)
+           + promotion_last_5years*time_spend_company
+           + promotion_last_5years*last_evaluation
+           , data = emp, family = binomial)
 summary(fit)
 pred <- predict(fit,emp, type = "response")
 roc_obj <- roc(emp$left, pred)
