@@ -1,0 +1,156 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Data ingestion and model fitting &#8212; Turnover Analysis 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Web application" href="app.html" />
+    <link rel="prev" title="Welcome to Turnover Analysis’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-makedb">
+<span id="data-ingestion-and-model-fitting"></span><h1>Data ingestion and model fitting<a class="headerlink" href="#module-makedb" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="makedb.make_tables">
+<code class="descclassname">makedb.</code><code class="descname">make_tables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#makedb.make_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the training data from csv and writes it to employees table in database</p>
+</dd></dl>
+
+<span class="target" id="module-model"></span><dl class="function">
+<dt id="model.fit_model">
+<code class="descclassname">model.</code><code class="descname">fit_model</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#model.fit_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a tuple with X matrix and Y vector as input. Fits a logistic regression on them.
+Then pickles the model for future use.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>tuple</em>) – Tuple with X matrix and Y vector for model fitting.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.pickle_model">
+<code class="descclassname">model.</code><code class="descname">pickle_model</code><span class="sig-paren">(</span><em>model</em><span class="sig-paren">)</span><a class="headerlink" href="#model.pickle_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pickle the model</p>
+</dd></dl>
+
+<span class="target" id="module-__init__"></span><dl class="function">
+<dt id="__init__.preprocess_for_sklearn">
+<code class="descclassname">__init__.</code><code class="descname">preprocess_for_sklearn</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__.preprocess_for_sklearn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocesses data into a format that is compatible with sklearn.
+The preprocessed data can be used both to train the model and to make predictions on the test set.
+It returns a tuple with the X matrix and Y vector (in that order).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>dataframe</em>) – The dataframe with the data to be preprocessed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A tuple with the X matrix and the Y vector.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="__init__.read_data">
+<code class="descclassname">__init__.</code><code class="descname">read_data</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__.read_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the data from a specified table in the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) – Name of table to</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A pandas dataframe with the data.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dataframe</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Turnover Analysis’s documentation!</a></li>
+      <li>Next: <a href="app.html" title="next chapter">Web application</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Luca Colombo.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/develop.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

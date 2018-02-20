@@ -10,7 +10,8 @@ Welcome to Turnover Analysis's documentation!
    :maxdepth: 2
    :caption: Contents:
    
-   code
+   develop
+   app
 
 
 
