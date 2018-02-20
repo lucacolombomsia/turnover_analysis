@@ -12,6 +12,7 @@ def make_tables() :
     train, test = train_test_split(employees, test_size=1000, random_state = 12345)
     test = test.reset_index(drop=True)
     test = test.join(pd.read_csv("../data/random-names.csv"))
+    test = test.drop(["left"], axis = 1)
     jul17, jan18 = train_test_split(test, test_size=500, random_state = 12345)
     engine = create_engine(secret_config.database_config)
     jul17.to_sql(name = 'employees_eval_jul17', con = engine, if_exists='replace', index=False)

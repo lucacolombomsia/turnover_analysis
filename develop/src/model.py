@@ -15,7 +15,7 @@ def fit_model(data):
         data (tuple): Tuple with X matrix and Y vector for model fitting.
     """
     #prepare data
-    X = data[0]
+    X = preprocess_for_sklearn(data[0])
     y = data[1]
     #fit model
     logreg = LogisticRegression()
@@ -33,5 +33,5 @@ def pickle_model(model):
 
 if __name__ == "__main__":
     #fit_model_pickle(read_data())
-    pickle_model(fit_model(preprocess_for_sklearn(read_data("employees_hist_data"))))
+    pickle_model(fit_model(read_data("employees_hist_data")))
 

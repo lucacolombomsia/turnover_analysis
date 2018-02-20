@@ -58,7 +58,7 @@ def import_model():
 
 def make_predictions(dbtable, model, n = 5):
     data = read_data(dbtable)
-    X_matrix = preprocess_for_sklearn(data)[0]
+    X_matrix = preprocess_for_sklearn(data)
     y_pred = pd.DataFrame({"phat" : model.predict_proba(X_matrix)[:,1]})
     data = data.join(y_pred)
     data = data.sort_values(by='phat', ascending = False)
