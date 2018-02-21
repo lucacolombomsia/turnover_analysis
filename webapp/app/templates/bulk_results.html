@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>{{date}} Employee Evaluation</h1>
+
+	<div class="subtitle">
+	  The following table shows the {{n}} employees who are most likely to quit</div>
+	<div class="subtitle">
+
+	{% for table in tables %}
+	{{ table|safe }}
+	{% endfor %}
+	</div>
+{% endblock %}

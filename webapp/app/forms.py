@@ -9,11 +9,11 @@ class PredictionForm(FlaskForm):
     evaluation = FloatField('Last Evaluation', 
         validators=[DataRequired(), NumberRange(min=0, max=1)])
     projects = IntegerField('Number of projects',
-        validators=[NumberRange(min=1, message="An integer larger than 0")])
+        validators=[NumberRange(min=1, message="Please input an integer larger than 0")])
     hours = IntegerField('Average monthly hours',
-        validators=[NumberRange(min=1, message="An integer larger than 0")])
+        validators=[NumberRange(min=1, message="Please input an integer larger than 0")])
     tenure = IntegerField('Tenure',
-        validators=[NumberRange(min=1, message="An integer larger than 0")])
+        validators=[NumberRange(min=1, message="Please input an integer larger than 0")])
     accident = BooleanField('Work Accident')
     promotion = BooleanField('Promotion in last 5 years')
     department = SelectField('Department', 
@@ -41,7 +41,7 @@ def validate_dates(form, field):
             raise StopValidation('No employee evaluation on this date')
 
 class DatabaseForm(FlaskForm):
-    date = DateField('Month and year of last Employee Evaluation',
+    date = DateField('Month and year of Employee Evaluation of interest',
         format='%Y-%m', validators=[validate_dates])
     number = IntegerField('Number of results to display',
         validators=[NumberRange(min=1, message="An integer larger than 0")])

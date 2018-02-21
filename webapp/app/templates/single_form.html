@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Title</h1>
-	<div>Enter values in the fields, then click "Submit"</div>
+    <h1>Evaluate the risk that an employee will quit</h1>
+	<div class="subtitle">Enter values in the fields, then click "Submit"</div>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
             {{ form.satisfaction.label }}
-            {{ form.satisfaction(size=25, placeholder="Number between 0 and 1") }}<br>
+            {{ form.satisfaction(size=25, placeholder="A number between 0 and 1") }}<br>
             {% for error in form.satisfaction.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
             {{ form.evaluation.label }}
-            {{ form.evaluation(size=25, placeholder="Number between 0 and 1") }}<br>
+            {{ form.evaluation(size=25, placeholder="A number between 0 and 1") }}<br>
             {% for error in form.evaluation.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}

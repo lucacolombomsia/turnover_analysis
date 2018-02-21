@@ -8,7 +8,7 @@ from datetime import datetime as dt
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    return render_template('homepage.html')
 
 @app.route('/single_emp', methods=['GET', 'POST'])
 def single_emp():
@@ -18,8 +18,8 @@ def single_emp():
         model = import_model()
         y_pred = round(model.predict_proba(data)[0][1]*100, 2)
         text = give_recommendation(y_pred, model, data)
-        return render_template('thanks.html', perc=y_pred, sentences = text)
-    return render_template('login.html', form=form)
+        return render_template('single_results.html', perc=y_pred, sentences = text)
+    return render_template('single_form.html', form=form)
 
 @app.route('/table', methods=['GET', 'POST'])
 def table():
@@ -33,6 +33,6 @@ def table():
             data = 'employees_eval_jul17'
         model = import_model()
         pred_data = make_predictions(dbtable = data, model = model, n = num)
-        return render_template('table.html', tables=[pred_data.to_html()],
+        return render_template('bulk_results.html', tables=[pred_data.to_html(classes='tab', index = False)],
                               date = date_str, n = num)
-    return render_template('database_form.html', form = form)
+    return render_template('bulk_form.html', form = form)

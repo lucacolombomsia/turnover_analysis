@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Title</h1>
-	<div>Enter values in the fields, then click "Submit"</div>
+    <h1>Find the employees that are most likely to quit</h1>
+	<div class="subtitle">Enter values in the fields, then click "Submit"</div>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
             {{ form.date.label }}<br>
-            {{ form.date(size=25, placeholder="Number between 0 and 1") }}<br>
+            {{ form.date(size=45, placeholder="Format YYYY-MM. Evaluations in January and July.") }}<br>
             {% for error in form.date.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
             {{ form.number.label }}<br>
-            {{ form.number(size=25, placeholder="Number between 0 and 1") }}<br>
+            {{ form.number(size=5) }}<br>
             {% for error in form.number.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}

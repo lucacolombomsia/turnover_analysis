@@ -1,3 +1,8 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 h1, h2          { color: #000000; }
 h1, h2          { margin: 0; }
 h1              { border-bottom: 2px solid #eee; }
@@ -13,10 +18,14 @@ table.dataframe, .dataframe th, .dataframe td {
   font-size: 0.9em;
 }
 
-tr:nth-child(odd)		{ background-color:#eee; }
+tr:nth-child(odd)	{ background-color:#eee; }
 tr:nth-child(even)	{ background-color:#fff; }
-
 tr:hover            { background-color: #ffff99;}
+
+.tab thead th {
+    background-color: #4CAF50;
+    color: white;
+}
 
 div.padding {
     padding-top: 16px;
@@ -24,9 +33,9 @@ div.padding {
     
 }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+div.subtitle {
+    padding-top: 8px;
+    
 }
 
 .topnav {
@@ -51,4 +60,14 @@ body {
 .topnav a.active {
   background-color: #4CAF50;
   color: white;
+}
+
+#submit {
+	padding: 6px 10px 6px;
+	font-size: 15px;
+	background-color: #4CAF50;
+	font-weight: bold;
+	color: #ffffff;
+	-webkit-border-radius: 100px;
+	cursor: pointer;
 }
