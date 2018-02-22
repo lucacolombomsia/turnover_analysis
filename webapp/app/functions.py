@@ -114,14 +114,16 @@ def give_recommendation(proba, model, data):
     #historical data suggests that the company should act whenever the predicted probability of
     #quitting is above 25%
     if proba > 25:
-        text = ["This guy will quit, watch out!"]
+        text = ["""Historical data suggests that actions should be taken to reduce the risk
+        of an employee quitting whenever his or her predicted probability of quitting is
+        above 25%."""]
         #make prediction on the "new data", as modified by the give_promotion function
         y_hat_prime = round(model.predict_proba(give_promotion(data))[0][1]*100, 2)
         if proba != y_hat_prime:
             text += ['''Offering a promotion to this employee would lower
-            the probability with which he will quit to {}%'''.format(y_hat_prime)]
+            the probability with which he or she will quit to {}%'''.format(y_hat_prime)]
     else:
-        text = ["Nothing to worry about!"]
+        text = ["It is unlikely that this employee will quit. No action needs to be taken."]
     return text
 
 def make_predictions(dbtable, model, n):
