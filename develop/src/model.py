@@ -8,11 +8,13 @@ from src import read_data, preprocess_for_sklearn
 
 def fit_model(data):
     """
-    Takes a tuple with X matrix and Y vector as input. Fits a logistic regression on them.
-    Then pickles the model for future use.
+    Takes the training data that has been read from the database and fits a Logistic Regression model.
 
     Args:
-        data (tuple): Tuple with X matrix and Y vector for model fitting.
+        data (tuple): Tuple with X matrix and Y vector.
+
+    Returns:
+        A trained logistic regression model
     """
     #prepare data
     X = preprocess_for_sklearn(data[0])
@@ -24,7 +26,10 @@ def fit_model(data):
 
 def pickle_model(model):
     """
-    Pickle the model
+    Takes a trained model and writes it into a pickle file.
+
+    Args:
+        model: A trained model.
     """
     pkl_filename = '../models/logistic.pkl'
     model_pkl = open(pkl_filename, 'wb')
@@ -32,6 +37,5 @@ def pickle_model(model):
     model_pkl.close()
 
 if __name__ == "__main__":
-    #fit_model_pickle(read_data())
     pickle_model(fit_model(read_data("employees_hist_data")))
 

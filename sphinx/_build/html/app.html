@@ -39,64 +39,137 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-__init__">
-<span id="web-application"></span><h1>Web application<a class="headerlink" href="#module-__init__" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-forms">
+<span id="web-application"></span><h1>Web application<a class="headerlink" href="#module-forms" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="forms.DatabaseForm">
+<em class="property">class </em><code class="descclassname">forms.</code><code class="descname">DatabaseForm</code><span class="sig-paren">(</span><em>formdata=&lt;object object&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#forms.DatabaseForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>The form that will be used to collect the user input regarding the bulk load prediction.
+The user can choose the date of the employee evaluation of interest and the number of results to be displayed.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="forms.PredictionForm">
+<em class="property">class </em><code class="descclassname">forms.</code><code class="descname">PredictionForm</code><span class="sig-paren">(</span><em>formdata=&lt;object object&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#forms.PredictionForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>The form that will be used to collect the user input to make predictions on a single employee.</p>
+</dd></dl>
+
 <dl class="function">
-<dt id="__init__.preprocess_for_sklearn">
-<code class="descclassname">__init__.</code><code class="descname">preprocess_for_sklearn</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__.preprocess_for_sklearn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Preprocesses data into a format that is compatible with sklearn.
-The preprocessed data can be used both to train the model and to make predictions on the test set.
-It returns a tuple with the X matrix and Y vector (in that order).</p>
+<dt id="forms.validate_dates">
+<code class="descclassname">forms.</code><code class="descname">validate_dates</code><span class="sig-paren">(</span><em>form</em>, <em>field</em><span class="sig-paren">)</span><a class="headerlink" href="#forms.validate_dates" title="Permalink to this definition">¶</a></dt>
+<dd><p>A custom validator for the date field in the DatabaseForm.
+It makes sure that the user inputs a valid date, ie a date on which an employee evaluation
+was conducted by the company.</p>
+</dd></dl>
+
+<span class="target" id="module-functions"></span><dl class="function">
+<dt id="functions.give_promotion">
+<code class="descclassname">functions.</code><code class="descname">give_promotion</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.give_promotion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Support function for the give_recommendation function.
+It takes the output of preprocess_prediction_form_data as input.
+It modifies the processed data to “give a promotion” to our employee of interest.
+Example: if salary was low, it raises it to medium by changing the appropriate dummy and setting the
+dummy for “received a promotion in last 5 years” to 1.
+The output of this function will be used to predict the effect of giving a promotion on the
+probability of quitting of our employee of interest.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>dataframe</em>) – The dataframe with the data to be preprocessed.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – Form data preprocessed by the preprocess_prediction_form_data function.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A tuple with the X matrix and the Y vector.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Form data in the same format as the input, but with different values.</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="function">
-<dt id="__init__.read_data">
-<code class="descclassname">__init__.</code><code class="descname">read_data</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__.read_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads the data from a specified table in the database.</p>
+<dt id="functions.give_recommendation">
+<code class="descclassname">functions.</code><code class="descname">give_recommendation</code><span class="sig-paren">(</span><em>proba</em>, <em>model</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.give_recommendation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Based on the predicted probability of quitting of the employee, suggest what actions should be taken
+(if any) to mitigate the risk of him/her quitting and how effective these actions are expected to be.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) – Name of table to</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>proba</strong> (<em>float</em>) – predicted probability of quitting.</li>
+<li><strong>model</strong> – model to be used for prediction.</li>
+<li><strong>data</strong> – Form data preprocessed by the preprocess_prediction_form_data function.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A pandas dataframe with the data.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of strings with the recommended actions to be displayed in the results page.</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dataframe</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
-<span class="target" id="module-forms"></span><span class="target" id="module-functions"></span><dl class="function">
+<dl class="function">
+<dt id="functions.import_model">
+<code class="descclassname">functions.</code><code class="descname">import_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#functions.import_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unpickles the model that was previously fit on the training data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The trained sklearn Logistic Regression model.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="functions.make_predictions">
+<code class="descclassname">functions.</code><code class="descname">make_predictions</code><span class="sig-paren">(</span><em>dbtable</em>, <em>model</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.make_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bulk loads the data from a table in the AWS database and predicts for each employee
+the probability he/she will quit.
+The prediction is performed on the test data that we heldout from the original data.
+This is meant to simulate in-production data that comes from the annual or biannual
+company-wide employee evaluation.
+The function then returns a table with the n employees who are most likely to quit.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dbtable</strong> (<em>str</em>) – name of the table to be queried for the bulk load.</li>
+<li><strong>model</strong> – model to be used for prediction.</li>
+<li><strong>n</strong> (<em>int</em>) – number of results to be shown.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A dataframe with the n employees who are most likely to quit.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dataframe</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="functions.preprocess_prediction_form_data">
 <code class="descclassname">functions.</code><code class="descname">preprocess_prediction_form_data</code><span class="sig-paren">(</span><em>form</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.preprocess_prediction_form_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Preprocesses data inputted by the user in the flask app.</p>
-<p>The user inputs data in the form on the flask app. The data is then read and must be preprocessed before
-being used for prediction.
+<dd><p>Reads and preprocesses data inputted by the user in the form .</p>
+<p>The user inputs data in the form on the app.
+The data is then read and must be preprocessed before being used for prediction.
 The model was fit using scikit learn, so categorical variables need to be transformed into dummies
 for the user input to be used for prediction.
-The output of this function contains all necessary dummies and is ready to be fed into the model.</p>
+The output of this is ready to be fed into the model and used for prediction.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>a_orig</strong> (<em>list</em>) – A list with the user input read from the form.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>form</strong> – The form where the user can input the data.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list with the processed data.</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A 2D numpy array with the processed data, that can be fed into the sklearn model.</td>
 </tr>
 </tbody>
 </table>
