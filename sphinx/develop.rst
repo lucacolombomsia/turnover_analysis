@@ -6,5 +6,5 @@ Data ingestion and model fitting
    :members:
 .. automodule:: model
    :members:
-.. automodule:: preprocess
+.. automodule:: __init__
    :members:

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<link rel="stylesheet" href="../static/style.css">
+		
+		<title>Turnover Analysis web-app</title>
+	</head>
+
+<body>
+
+<div class="topnav">
+  <a class="active" href="{{ url_for('index') }}">Home</a>
+  <a href="{{ url_for('single_emp') }}">Prediction for single employee</a>
+  <a href="{{ url_for('table') }}">Bulk load Employee Evaluation</a>
+</div>
+	</body>
+
+<div class="padding">
+{% block content %}{% endblock %}
+</div>	
+
+</html

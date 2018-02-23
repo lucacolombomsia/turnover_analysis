@@ -1,5 +1,8 @@
 library(pROC)
-emp <- read.csv("../data/turnover.csv")
+library(car)
+library(dplyr)
+emp <- read.csv("../data/train.csv")
+emp <- select(emp, -c(X, emp_ID))
 
 CVInd <- function(n,K) {  #n is sample size; K is number of parts; returns K-length list of indices for each part
   m<-floor(n/K)  #approximate size of each part
@@ -17,33 +20,65 @@ CVInd <- function(n,K) {  #n is sample size; K is number of parts; returns K-len
 
 Nrep<-10 #number of replicates of CV
 K<-5  #K-fold CV on each replicate
-n.models = 1 #number of different models to fit and compare
+n.models = 3 #number of different models to fit and compare
 n=nrow(emp)
 y<-emp$left
 
-set.seed(123)
+set.seed(12345)
+yhat = matrix(0,n,n.models)
+yclass = matrix(0,n,n.models)
 AUC <- matrix(0, Nrep, n.models)
-p_star <- matrix(0, Nrep, n.models)
-SS_star <- matrix(0, Nrep, n.models)
+CCR_CV = matrix(0,Nrep,n.models)
 for (j in 1:Nrep) {
-  yhat=rep(0,n)
-  Ind<-CVInd(n,K)
+  Ind = CVInd(n,K)
   for (k in 1:K) {
-    out<-glm(left~., data = emp[-Ind[[k]],], family = binomial)
-    yhat[Ind[[k]]]<-as.numeric(predict(out,emp[Ind[[k]],], type = "response"))
-  }
+    # model 1
+    out<-glm(left~.
+             + promotion_last_5years*average_montly_hours
+             + promotion_last_5years*time_spend_company, data = emp[-Ind[[k]],], family = binomial)
+    yhat[Ind[[k]],1]<-as.numeric(predict(out,emp[Ind[[k]],], type = "response"))
+    yclass[Ind[[k]],1] <- yhat[Ind[[k]],1]>= .5
+    
+    #model 2
+    out<-glm(left~.
+             + promotion_last_5years*average_montly_hours
+             + promotion_last_5years*time_spend_company
+             + promotion_last_5years*last_evaluation, data = emp[-Ind[[k]],], family = binomial)
+    yhat[Ind[[k]],2]<-as.numeric(predict(out,emp[Ind[[k]],], type = "response"))
+    yclass[Ind[[k]],2] <- yhat[Ind[[k]],2]>= .5
+    
+    #model 3
+    out<-glm(left~.
+             + promotion_last_5years*time_spend_company
+             + promotion_last_5years*last_evaluation, data = emp[-Ind[[k]],], family = binomial)
+    yhat[Ind[[k]],3]<-as.numeric(predict(out,emp[Ind[[k]],], type = "response"))
+    yclass[Ind[[k]],3] <- yhat[Ind[[k]],3]>= .5
+  } #end of k loop
+  #get CV CCR
+  CCR_CV[j,] = apply(yclass,2,function(x) mean(y == x))
   #get CV AUC
-  roc_obj <- roc(y, yhat)
+  roc_obj <- roc(y, yhat[,1])
   AUC[j,1] <- auc(roc_obj)
-  x = roc_obj$sensitivities + roc_obj$specificities
-  p_star[j,1] = roc_obj$thresholds[which(x == max(x))]
-  SS_star[j,1] = x[which(x == max(x))]
+  roc_obj <- roc(y, yhat[,2])
+  AUC[j,2] <- auc(roc_obj)
+  roc_obj <- roc(y, yhat[,3])
+  AUC[j,3] <- auc(roc_obj)
 } #end of j loop
-mean(AUC) #0.8200388
-mean(p_star) # 0.2608738
-mean(SS_star) #1.498719
+CCR_CV.ave <- apply(CCR_CV,2,mean) #mean of CV correct classification rate
+AUC_CV.ave <- apply(AUC,2,mean) #mean of CV AUC
+CCR_CV.ave
+AUC_CV.ave
 
+
+#################################################
+### Final model
+#################################################
 fit <- glm(left~., data = emp, family = binomial)
+
+fit <- glm(left~.
+           + promotion_last_5years*time_spend_company
+           + promotion_last_5years*last_evaluation
+           , data = emp, family = binomial)
 summary(fit)
 pred <- predict(fit,emp, type = "response")
 roc_obj <- roc(emp$left, pred)
@@ -52,32 +87,7 @@ x = roc_obj$sensitivities + roc_obj$specificities
 roc_obj$thresholds[which(x == max(x))]
 x[which(x == max(x))]
 tab <- table(emp$left, pred>.25)
-tab
+tab[2,2]/(tab[2,2]+tab[2,1]) #TPR
+sum(diag(tab))/sum(tab) #CCR
 
-# #find optimal p* from CCR
-# results <- c()
-# for (x in seq(0.35, 0.65, by = 0.01)) {
-#   tab <- table(emp$left, yhat>x)
-#   CCR <- sum(diag(tab))/sum(tab)
-#   results <- c(results, CCR)
-# }
-# df <- data.frame(p = seq(0.35, 0.65, by = 0.01), ccr = results)
-
-
-
-
-##################
-# yhat=matrix(0,n,n.models)
-# MSE<-matrix(0,Nrep,n.models)
-# for (j in 1:Nrep) {
-#   Ind<-CVInd(n,K)
-#   for (k in 1:K) {
-#     out<-glm(left~., data = emp[-Ind[[k]],], family = binomial) #the first model to compare
-#     yhat[Ind[[k]],1]<-as.numeric(predict(out,emp[Ind[[k]],]))
-#   } #end of k loop
-#   MSE[j,]=apply(yhat,2,function(x) sum((y-x)^2))/n
-# } #end of j loop
-# MSE
-# MSEAve<- apply(MSE,2,mean); MSEAve #averaged mean square CV error
-# MSEsd <- apply(MSE,2,sd); MSEsd   #SD of mean square CV error
-
+pred[1:2]
