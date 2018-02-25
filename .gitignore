@@ -2,6 +2,7 @@ turnover/
 
 develop/src/secret_config.py
 
+train.csv
 *.Rhistory
 *.Rproj
 
