@@ -3,7 +3,7 @@ from sklearn.linear_model import LogisticRegression
 import pickle
 import os, sys
 sys.path.insert(0, os.path.abspath('.'))
-sys.path.append('../')
+sys.path.append('develop/')
 from src import read_data, preprocess_for_sklearn
 
 def fit_model(data):
@@ -31,7 +31,7 @@ def pickle_model(model):
     Args:
         model: A trained model.
     """
-    pkl_filename = '../models/logistic.pkl'
+    pkl_filename = 'develop/models/logistic.pkl'
     model_pkl = open(pkl_filename, 'wb')
     pickle.dump(model, model_pkl)
     model_pkl.close()

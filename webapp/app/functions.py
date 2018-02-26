@@ -2,8 +2,8 @@ import pickle
 import numpy as np
 import os, sys
 sys.path.insert(0, os.path.abspath('.'))
-sys.path.append('../develop/')
-sys.path.append('../develop/src')
+sys.path.append('develop/')
+sys.path.append('develop/src')
 from src import read_data, preprocess_for_sklearn
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
@@ -15,7 +15,7 @@ def import_model():
     Returns:
         The trained sklearn Logistic Regression model.
     """
-    pkl_filename = '../develop/models/logistic.pkl'
+    pkl_filename = 'develop/models/logistic.pkl'
     model_pkl = open(pkl_filename, 'rb')
     model = pickle.load(model_pkl)
     model_pkl.close()

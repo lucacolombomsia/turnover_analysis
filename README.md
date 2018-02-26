@@ -39,11 +39,16 @@ A high turnover rate can seriously impact our company’s ability to be successf
     export HOST=XXX
     ```
 
+5. Set environment variables from file
+
+    ```
+    source turnover.env
+    ```
+
 5. Run the Makefile 
 
     ```
     make all
     ```
-    
 
-You should then be able to go to the IP address where the app is running and use the app.
+You can then go to the IP address where the app is running and use the app.
