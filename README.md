@@ -45,10 +45,16 @@ A high turnover rate can seriously impact our company’s ability to be successf
     source turnover.env
     ```
 
-5. Run the Makefile 
+6. Run the Makefile 
 
     ```
     make all
+    ```
+
+7. Launch the app
+
+    ```
+    python webapp/turnover.py
     ```
 
 You can then go to the IP address where the app is running and use the app.

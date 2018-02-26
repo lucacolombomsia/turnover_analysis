@@ -1,6 +1,7 @@
 turnover/
 
 develop/src/secret_config.py
+develop/models/logistic.pkl
 
 train.csv
 *.Rhistory
