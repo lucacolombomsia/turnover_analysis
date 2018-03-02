@@ -3,6 +3,7 @@ turnover/
 develop/src/secret_config.py
 develop/models/logistic.pkl
 
+turnover.csv
 train.csv
 *.Rhistory
 *.Rproj
@@ -16,3 +17,8 @@ train.csv
 # Jupyter NB Checkpoints
 .ipynb_checkpoints/
 .Rproj.user
+
+
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

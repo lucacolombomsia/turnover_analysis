@@ -9,9 +9,8 @@ develop/models/logistic.pkl: develop/logs/makedb.log
 model: develop/models/logistic.pkl
 
 clean:
-	rm develop/logs/makedb.log
+	rm develop/logs/makedb.log develop/models/logistic.pkl
 
 all: db model
 
 .PHONY: all
-
