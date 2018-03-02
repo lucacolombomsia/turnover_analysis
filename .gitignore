@@ -1,18 +1,27 @@
+#virtual environment
 turnover/
 
+#trained model
 develop/src/secret_config.py
 develop/models/logistic.pkl
 
+#original data
 turnover.csv
 train.csv
+
+#R files
+*.R
 *.Rhistory
 *.Rproj
 
 .DS_Store
+*.pyc
+
+#log files
 *.log
 
-.env
-*.pyc
+#secrets
+turnover.env
 
 # Jupyter NB Checkpoints
 .ipynb_checkpoints/
