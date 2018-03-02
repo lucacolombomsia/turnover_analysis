@@ -31,7 +31,6 @@ A high turnover rate can seriously impact our company’s ability to be successf
 4. Set up turnover.env file with the following structure
 
     ```
-    export DATABASE_URL= XXX
     export DATABASE=XXX
     export USERNAME=XXX
     export PORT=XXX

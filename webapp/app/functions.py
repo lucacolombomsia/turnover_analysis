@@ -5,8 +5,10 @@ sys.path.insert(0, os.path.abspath('.'))
 sys.path.append('develop/')
 sys.path.append('develop/src')
 from src import read_data, preprocess_for_sklearn
+import src.dbconfig
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
+from sqlalchemy import create_engine
 
 def import_model():
     """
@@ -21,24 +23,16 @@ def import_model():
     model_pkl.close()
     return model
 
-def preprocess_prediction_form_data(form):
-    """ Reads and preprocesses data inputted by the user in the form .   
-    
-    The user inputs data in the form on the app.
-    The data is then read and must be preprocessed before being used for prediction.
-    The model was fit using scikit learn, so categorical variables need to be transformed into dummies
-    for the user input to be used for prediction.
-    The output of this is ready to be fed into the model and used for prediction.
 
+def read_prediction_form_data(form):
+    """ Reads data inputted by the user in the Single Employee Evaluation form
+    
     Args:
         form: The form where the user can input the data.
 
     Returns:
-        A 2D numpy array with the processed data, that can be fed into the sklearn model.
+        list: A list with the data read from the form.
     """
-
-    #"form" is an instance of a class that inherits from a FlaskForm
-    #can easily read data by simply accessing the right methods
     entry1 = form.satisfaction.data
     entry2 = form.evaluation.data
     entry3 = form.projects.data
@@ -49,9 +43,32 @@ def preprocess_prediction_form_data(form):
     entry8 = form.department.data
     entry9 = form.salary.data
 
+    data = [entry1, entry2, entry3, entry4, entry5, int(entry6), int(entry7), entry8, entry9]
+    return data
+
+
+def preprocess_prediction_form_data(form_data):
+    """ Preprocesses data inputted by the user in the Single Employee Evaluation form.   
+    
+    The data that has been read from the form must be preprocessed before being used for prediction.
+    The model was fit using scikit learn, so categorical variables need to be transformed into dummies
+    for the user input to be used for prediction.
+    The output of this is ready to be fed into the model and used for prediction.
+
+    Args:
+        form_data (list): A list with the data read from the form.
+
+    Returns:
+        A 2D numpy array with the processed data, that can be fed into the sklearn model.
+    """
+
+    #"form" is an instance of a class that inherits from a FlaskForm
+    #can easily read data by simply accessing the right methods
+    
+
     #will create a list with all the processed data
-    #start by adding the first 7 elements (5 numerical variables + 2 binary variables)
-    mylist = [entry1, entry2, entry3, entry4, entry5, int(entry6), int(entry7)]
+    #start with the first 7 elements (5 numerical variables + 2 binary variables)
+    mylist = form_data[0:7]
     #there are 10 possible categories (9 dummies) for the "department" variable
     #there are 3 possibile categories (2 dummies) for the "salary" variable
     #in total, 11 dummies ==> add 11 zeros
@@ -62,15 +79,40 @@ def preprocess_prediction_form_data(form):
     #can use values in entry8 and entry 9 to change the relevant dummy to 1!
     #Accounting is the reference category, so no dummy for it ==> form returns "drop" when
     #user chooses accounting
-    if (str(entry8)!="drop"):
-        mylist[int(entry8)] = 1
+    if (str(form_data[7])!="drop"):
+        mylist[int(form_data[7])] = 1
     #High is the reference category, so no dummy for it ==> form returns "drop" when
     #user chooses high
-    if (str(entry9)!="drop"):
-        mylist[int(entry9)] = 1
+    if (str(form_data[8])!="drop"):
+        mylist[int(form_data[8])] = 1
     #convert the list into a 2D np.array
     #this is required for the sklearn logistic regression to use the data for prediction
-    return np.array([mylist])
+    return np.array([mylist])    
+
+def write_prediction_form_data(form_data, prediction):
+    dept_dict = {"drop" : "Accounting",
+                 '7' : "HR",
+                 '8' : "IT",
+                 '9' : "Management",
+                 '10' : "Marketing",
+                 '11' : "Product management",
+                 '12' : "R&D",
+                 '13' : "Sales",
+                 '14' : "Support",
+                 '15' : "Technical"}
+    salary_dict = {"drop" : "High",
+                   '16' : "Low",
+                   '17' : "Medium"}
+    
+    names = ['satisfaction_level', 'last_eval', 'num_projects', 'monthly_hours', 'tenure',
+             'work_accident', 'promotion_last_5years']
+    data = pd.DataFrame(data = [form_data[0:7]], columns = names)
+    data["dept"] = dept_dict[form_data[7]]
+    data["salary"] = salary_dict[form_data[8]]
+    data["predicted_proba"] = prediction
+    #write to database
+    engine = create_engine(src.dbconfig.database_config)
+    data.to_sql(name = 'user_input', con = engine, if_exists = 'append', index=False)
 
 def give_promotion(data):
     """

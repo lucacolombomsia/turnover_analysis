@@ -1,7 +1,8 @@
 from flask import render_template, flash, redirect, url_for
 from app import app
 from app.forms import PredictionForm, DatabaseForm
-from app.functions import preprocess_prediction_form_data, import_model, make_predictions, give_promotion, give_recommendation
+from app.functions import read_prediction_form_data, preprocess_prediction_form_data, write_prediction_form_data
+from app.functions import import_model, make_predictions, give_promotion, give_recommendation
 from sklearn.linear_model import LogisticRegression
 from datetime import datetime as dt
 
@@ -16,15 +17,18 @@ def single_emp():
     form = PredictionForm()
     #if the WTForm validators validate:
     if form.validate_on_submit():
-        #preprocess the form data
-        data = preprocess_prediction_form_data(form)
+        #read and preprocess the form data
+        data = read_prediction_form_data(form)
+        prep_data = preprocess_prediction_form_data(data)
         #unpickle the model
         model = import_model()
         #predict probability of quitting
-        y_pred = round(model.predict_proba(data)[0][1]*100, 2)
+        y_pred = round(model.predict_proba(prep_data)[0][1]*100, 2)
+        #write user input to database
+        write_prediction_form_data(data, y_pred)
         #given the predicted proba, what is the best course of action?
         #use the giverecommendation function to find out
-        text = give_recommendation(y_pred, model, data)
+        text = give_recommendation(y_pred, model, prep_data)
         #show results
         return render_template('single_results.html', perc=y_pred, sentences = text)
     return render_template('single_form.html', form=form)
