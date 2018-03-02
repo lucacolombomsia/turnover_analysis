@@ -11,8 +11,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 def import_model():
-    """
-    Unpickles the model that was previously fit on the training data.
+    """Unpickles the model that was previously fit on the training data.
 
     Returns:
         The trained sklearn Logistic Regression model.
@@ -25,7 +24,7 @@ def import_model():
 
 
 def read_prediction_form_data(form):
-    """ Reads data inputted by the user in the Single Employee Evaluation form
+    """Reads data inputted by the user in the Single Employee Evaluation form.
     
     Args:
         form: The form where the user can input the data.
@@ -48,12 +47,12 @@ def read_prediction_form_data(form):
 
 
 def preprocess_prediction_form_data(form_data):
-    """ Preprocesses data inputted by the user in the Single Employee Evaluation form.   
+    """Preprocesses data inputted by the user in the Single Employee Evaluation form.   
     
     The data that has been read from the form must be preprocessed before being used for prediction.
     The model was fit using scikit learn, so categorical variables need to be transformed into dummies
     for the user input to be used for prediction.
-    The output of this is ready to be fed into the model and used for prediction.
+    The output of this function is ready to be fed to the trained model and used for prediction.
 
     Args:
         form_data (list): A list with the data read from the form.
@@ -90,6 +89,13 @@ def preprocess_prediction_form_data(form_data):
     return np.array([mylist])    
 
 def write_prediction_form_data(form_data, prediction):
+    """Writes data inputted by the user to a database.
+
+    Args:
+        form_data (list): A list with the data read from the form.
+        prediction (float): The predicted probability of quitting.
+    """
+    #will need the following dictionaries to convert output of form into human readable data
     dept_dict = {"drop" : "Accounting",
                  '7' : "HR",
                  '8' : "IT",
@@ -104,15 +110,19 @@ def write_prediction_form_data(form_data, prediction):
                    '16' : "Low",
                    '17' : "Medium"}
     
+    #first columns are easy, they are numerical/logical, nothing to modify
     names = ['satisfaction_level', 'last_eval', 'num_projects', 'monthly_hours', 'tenure',
              'work_accident', 'promotion_last_5years']
     data = pd.DataFrame(data = [form_data[0:7]], columns = names)
+    #make department and salary information readable using dictionaries define above
     data["dept"] = dept_dict[form_data[7]]
     data["salary"] = salary_dict[form_data[8]]
+    #add predicted probability to the dataframe
     data["predicted_proba"] = prediction
-    #write to database
+    #write dataframe to database
     engine = create_engine(src.dbconfig.database_config)
     data.to_sql(name = 'user_input', con = engine, if_exists = 'append', index=False)
+
 
 def give_promotion(data):
     """
@@ -139,6 +149,7 @@ def give_promotion(data):
     elif list(data[0][16:18]) == [0,1]:
         data[0][16:18] = [0,0]
     return data
+
 
 def give_recommendation(proba, model, data):
     """
@@ -168,6 +179,7 @@ def give_recommendation(proba, model, data):
         text = ["It is unlikely that this employee will quit. No action needs to be taken."]
     return text
 
+
 def make_predictions(dbtable, model, n):
     """
     Bulk loads the data from a table in the AWS database and predicts for each employee
@@ -196,4 +208,3 @@ def make_predictions(dbtable, model, n):
     data = data.sort_values(by='phat', ascending = False)
     #return the n employees who are most likely to quit
     return data.head(n)
-

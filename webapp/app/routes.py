@@ -24,7 +24,7 @@ def single_emp():
         model = import_model()
         #predict probability of quitting
         y_pred = round(model.predict_proba(prep_data)[0][1]*100, 2)
-        #write user input to database
+        #write user input to database for future reference
         write_prediction_form_data(data, y_pred)
         #given the predicted proba, what is the best course of action?
         #use the giverecommendation function to find out

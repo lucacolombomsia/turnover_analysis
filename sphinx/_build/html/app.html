@@ -156,20 +156,55 @@ The function then returns a table with the n employees who are most likely to qu
 
 <dl class="function">
 <dt id="functions.preprocess_prediction_form_data">
-<code class="descclassname">functions.</code><code class="descname">preprocess_prediction_form_data</code><span class="sig-paren">(</span><em>form</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.preprocess_prediction_form_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads and preprocesses data inputted by the user in the form .</p>
-<p>The user inputs data in the form on the app.
-The data is then read and must be preprocessed before being used for prediction.
+<code class="descclassname">functions.</code><code class="descname">preprocess_prediction_form_data</code><span class="sig-paren">(</span><em>form_data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.preprocess_prediction_form_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocesses data inputted by the user in the Single Employee Evaluation form.</p>
+<p>The data that has been read from the form must be preprocessed before being used for prediction.
 The model was fit using scikit learn, so categorical variables need to be transformed into dummies
 for the user input to be used for prediction.
-The output of this is ready to be fed into the model and used for prediction.</p>
+The output of this function is ready to be fed to the trained model and used for prediction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>form_data</strong> (<em>list</em>) – A list with the data read from the form.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A 2D numpy array with the processed data, that can be fed into the sklearn model.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="functions.read_prediction_form_data">
+<code class="descclassname">functions.</code><code class="descname">read_prediction_form_data</code><span class="sig-paren">(</span><em>form</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.read_prediction_form_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads data inputted by the user in the Single Employee Evaluation form.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>form</strong> – The form where the user can input the data.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A 2D numpy array with the processed data, that can be fed into the sklearn model.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list with the data read from the form.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="functions.write_prediction_form_data">
+<code class="descclassname">functions.</code><code class="descname">write_prediction_form_data</code><span class="sig-paren">(</span><em>form_data</em>, <em>prediction</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.write_prediction_form_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes data inputted by the user to a database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>form_data</strong> (<em>list</em>) – A list with the data read from the form.</li>
+<li><strong>prediction</strong> (<em>float</em>) – The predicted probability of quitting.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>

@@ -7,8 +7,7 @@ sys.path.append('develop/')
 from src import read_data, preprocess_for_sklearn
 
 def fit_model(data):
-    """
-    Takes the training data that has been read from the database and fits a Logistic Regression model.
+    """Fits a logistic regression on the training data that has been read from the database.
 
     Args:
         data (tuple): Tuple with X matrix and Y vector.
@@ -25,8 +24,7 @@ def fit_model(data):
     return logreg
 
 def pickle_model(model):
-    """
-    Takes a trained model and writes it into a pickle file.
+    """Takes a trained model and writes it into a pickle file.
 
     Args:
         model: A trained model.
