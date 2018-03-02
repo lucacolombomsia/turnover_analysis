@@ -1,6 +1,6 @@
 import pandas as pd
 from sqlalchemy import create_engine
-import secret_config
+import dbconfig
 from sklearn.model_selection import train_test_split
 import logging
 
@@ -27,7 +27,7 @@ def make_tables() :
     #this data will be used for bulk-load predictions
     test = test.drop(["left"], axis = 1)
     jul17, jan18 = train_test_split(test, test_size=500, random_state = 12345)
-    engine = create_engine(secret_config.database_config)
+    engine = create_engine(dbconfig.database_config)
     logger.info('Created engine')
     jul17.to_sql(name = 'employees_eval_jul17', con = engine, if_exists='replace', index=False)
     logger.info('Wrote test set July 2017')

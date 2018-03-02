@@ -1,4 +1,4 @@
-import secret_config
+import dbconfig
 from sqlalchemy import create_engine
 import pandas as pd
 
@@ -14,7 +14,7 @@ def read_data(table_name):
     Args:
         table_name (str): Name of table to be queried
     """
-    engine = create_engine(secret_config.database_config)
+    engine = create_engine(dbconfig.database_config)
     sql = "select * from " + table_name
     data = pd.read_sql_query(sql, con = engine)
     #if the data contains the column "left" (the response), we have queried the training set
