@@ -9,6 +9,7 @@ import src.dbconfig
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
 from sqlalchemy import create_engine
+from time import localtime, strftime
 
 def import_model():
     """Unpickles the model that was previously fit on the training data.
@@ -60,11 +61,6 @@ def preprocess_prediction_form_data(form_data):
     Returns:
         A 2D numpy array with the processed data, that can be fed into the sklearn model.
     """
-
-    #"form" is an instance of a class that inherits from a FlaskForm
-    #can easily read data by simply accessing the right methods
-    
-
     #will create a list with all the processed data
     #start with the first 7 elements (5 numerical variables + 2 binary variables)
     mylist = form_data[0:7]
@@ -119,6 +115,8 @@ def write_prediction_form_data(form_data, prediction):
     data["salary"] = salary_dict[form_data[8]]
     #add predicted probability to the dataframe
     data["predicted_proba"] = prediction
+    #add timestamp to the dataframe
+    data["timestamp"] = strftime("%Y-%m-%d %H:%M:%S", localtime())
     #write dataframe to database
     engine = create_engine(src.dbconfig.database_config)
     data.to_sql(name = 'user_input', con = engine, if_exists = 'append', index=False)
