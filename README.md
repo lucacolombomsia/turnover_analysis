@@ -12,9 +12,9 @@ A high turnover rate can seriously impact our company’s ability to be successf
  
 ## Suggested steps to deploy app
 
-1. Clone repository
+1. Clone repository.
 
-2. Create virtual environment and activate it
+2. Create virtual environment and activate it:
 
     ```
     virtualenv -p python3 turnover
@@ -22,13 +22,13 @@ A high turnover rate can seriously impact our company’s ability to be successf
     ```
     
 
-3. Install required packages 
+3. Install required packages:
 
     ```
     pip install -r requirements.txt
     ```
 
-4. Set up turnover.env file with the following structure
+4. Set up turnover.env file with the following structure:
 
     ```
     export DATABASE=XXX
@@ -38,25 +38,25 @@ A high turnover rate can seriously impact our company’s ability to be successf
     export HOST=XXX
     ```
 
-5. Set environment variables from file
+5. Set environment variables from file:
 
     ```
     source turnover.env
     ```
 
-6. Download the data. The data was originally available on Kaggle, but it has since been remove. It can be downloaded from my Dropbox
+6. Download the original data into the develop/data folder. The data was originally available on Kaggle, but it has since been removed; it can be downloaded from my Dropbox:
 
     ```
     wget -O develop/data/turnover.csv https://www.dropbox.com/s/qnu09f9xo30njvc/turnover.csv?dl=1
     ```
 
-7. Run the Makefile 
+7. Run the Makefile:
 
     ```
     make all
     ```
 
-8. Launch the app
+8. Launch the app:
 
     ```
     python webapp/turnover.py
