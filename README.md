@@ -44,13 +44,19 @@ A high turnover rate can seriously impact our company’s ability to be successf
     source turnover.env
     ```
 
-6. Run the Makefile 
+6. Download the data. The data was originally available on Kaggle, but it has since been remove. It can be downloaded from my Dropbox
+
+    ```
+    wget -O develop/data/turnover.csv https://www.dropbox.com/s/qnu09f9xo30njvc/turnover.csv?dl=1
+    ```
+
+7. Run the Makefile 
 
     ```
     make all
     ```
 
-7. Launch the app
+8. Launch the app
 
     ```
     python webapp/turnover.py
