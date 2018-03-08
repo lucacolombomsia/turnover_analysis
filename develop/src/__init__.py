@@ -1,6 +1,7 @@
 import dbconfig
 from sqlalchemy import create_engine
 import pandas as pd
+import logging
 
 
 def read_data(table_name):
@@ -16,9 +17,17 @@ def read_data(table_name):
     Args:
         table_name (str): Name of table to be queried
     """
+    # setup log file
+    log_fmt = '%(asctime)s - %(levelname)s - %(message)s'
+    logging.basicConfig(filename='develop/logs/makedb.log',
+                        level=logging.INFO, format=log_fmt)
+    logger = logging.getLogger(__name__)
+
     engine = create_engine(dbconfig.database_config)
+    logger.info('Created engine for reading')
     sql = "select * from " + table_name
     data = pd.read_sql_query(sql, con=engine)
+    logger.info('Succesfully read data')
     # if the data contains the column "left" (the response), we have queried
     # the training set; if the data doesn't contain
     # the column "left", we have queried one of the test sets

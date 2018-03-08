@@ -5,24 +5,35 @@ from sklearn.model_selection import train_test_split
 import logging
 
 
-def make_tables():
+def prep_tables():
     """
-    Reads the training data from csv.
-    Randomly splits the data in one training set and two test sets.
-    Writes each dataset to a different table in the database.
-    """
-    # setup log file
-    log_fmt = '%(asctime)s - %(levelname)s - %(message)s'
-    logging.basicConfig(filename='develop/logs/makedb.log',
-                        level=logging.INFO, format=log_fmt)
-    logger = logging.getLogger(__name__)
+    Read the training data from csv.
+    Randomly split the data in one training set and two test sets.
+    The two test sets will simulate in-production data and will be
+    queried by the web app.
+    Since they will be used for prediction, drop response variable
+    for all observations in the test sets.
+    Also, add fake name to each employee in the test sets to better
+    simulate in-production data.
 
+    This is a support function for write_tables.
+    It returns 3 dataframes that write_tables will write into a
+    database.
+
+    Returns:
+        tuple: A tuple with the 3 dataframes.
+
+    """
+    # get logger
+    logger = logging.getLogger(__name__)
     employees = pd.read_csv('develop/data/turnover.csv')
+    logger.info('Read data from CSV')
     employees.insert(0, 'emp_ID', range(1, len(employees)+1))
     # holdout 1000 observation for bulk-loading and making prediction
     # this heldout data will simulate in-production data
     train, test = train_test_split(employees, test_size=1000,
                                    random_state=12345)
+    logger.info('Split train and test')
     test = test.reset_index(drop=True)
     # for test data, we add a name to each employee
     test = test.join(pd.read_csv("develop/data/random-names.csv"))
@@ -30,9 +41,24 @@ def make_tables():
     # the role of in-production data
     # this data will be used for bulk-load predictions
     test = test.drop(["left"], axis=1)
+    logger.info('Transformed test data into fake in-production data')
     jul17, jan18 = train_test_split(test, test_size=500, random_state=12345)
+    return (train, jul17, jan18)
+
+
+def write_tables():
+    """
+    Take the output of the function prep_tables (3 dataframes) and write each
+    of them in a different table in the database.
+    """
+    # get logger
+    logger = logging.getLogger(__name__)
+
+    # prepare tables using helper function
+    train, jul17, jan18 = prep_tables()
+    
     engine = create_engine(dbconfig.database_config)
-    logger.info('Created engine')
+    logger.info('Created engine for writing')
     jul17.to_sql(name='employees_eval_jul17', con=engine,
                  if_exists='replace', index=False)
     logger.info('Wrote test set July 2017')
@@ -45,4 +71,9 @@ def make_tables():
 
 
 if __name__ == "__main__":
-    make_tables()
+    # setup log file
+    log_fmt = '%(asctime)s - %(levelname)s - %(message)s'
+    logging.basicConfig(filename='develop/logs/makedb.log',
+                        level=logging.INFO, format=log_fmt)
+    logger = logging.getLogger(__name__)
+    write_tables()
