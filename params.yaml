@@ -1,3 +1,9 @@
-build_features:
-  drop_columns: [key, loudness, danceability, tempo, mode, time_signature, energy,
-    duration]
+directories:
+  pkl: develop/models/logistic.pkl
+  train_data: develop/data/turnover.csv
+  names: develop/data/random-names.csv
+  log: develop/logs/develop.log
+
+random: 12345
+
+test_size: 1000

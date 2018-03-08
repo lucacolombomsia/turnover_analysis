@@ -6,21 +6,22 @@ import logging
 
 def read_data(table_name):
     """
-    Reads the data from a specified table in the database.
-    It can be used to query both the train and the test set.
-    When asked to read the table that contains the training data, it will
-    return a tuple with the data from all the predictors (the X matrix) and
-    the data for the response (the Y vector).
-    When asked to read a table that contains the test data, it will return a
-    pandas dataframe with the data from all the predictors (the X matrix).
+    Read the data from a specified table in the database.
+
+    This function can be used to query both the train set (used to fit model)
+    and the "in-production" data (used to make bulk predictions).
+    This function will always return a dataframe with all columns stored
+    in the table that it is asked to query.
 
     Args:
         table_name (str): Name of table to be queried
+
+    Returns:
+        pandas.DataFrame: A dataframe with the data read from database.
     """
     # setup log file
     log_fmt = '%(asctime)s - %(levelname)s - %(message)s'
-    logging.basicConfig(filename='develop/logs/makedb.log',
-                        level=logging.INFO, format=log_fmt)
+    logging.basicConfig(level=logging.INFO, format=log_fmt)
     logger = logging.getLogger(__name__)
 
     engine = create_engine(dbconfig.database_config)
@@ -28,24 +29,17 @@ def read_data(table_name):
     sql = "select * from " + table_name
     data = pd.read_sql_query(sql, con=engine)
     logger.info('Succesfully read data')
-    # if the data contains the column "left" (the response), we have queried
-    # the training set; if the data doesn't contain
-    # the column "left", we have queried one of the test sets
-    try:
-        y = data.left
-        data = data.drop(["left"], axis=1)
-        return (data, y)
-    except AttributeError:
-        return data
+    return data
 
 
 def preprocess_for_sklearn(data):
     """
-    Preprocesses the data for all the predictors into a format that is
-    compatible with sklearn, by converting all categorical variables
+    Preprocess the data into a format compatible with sklearn.
+
+    Sklearn requires all categorical variables to be converted 
     into dummies.
-    The preprocessed data can be used both to train the model and to
-    make predictions on the test set.
+    The input is a dataframe of predictors, either from the train
+    or the in-production data.
 
     Args:
         data (dataframe): The dataframe with the data to be preprocessed.
@@ -59,8 +53,9 @@ def preprocess_for_sklearn(data):
     data = data.join(pd.get_dummies(data["sales"], prefix="dept"))
     data = data.join(pd.get_dummies(data["salary"], prefix="salary"))
     # drop variables that should not be in the X matrix
-    # these include: employer ID, categorical vars and one dummy
-    # per category (to avoid perfect multicollinearity)
+    # these include: employer ID, categorical variables that have
+    # been converted into dummies and one dummy per each
+    # categorical variable (to avoid perfect multicollinearity)
     data = data.drop(["emp_id", "salary_high", "dept_accounting",
                       "sales", "salary"], axis=1)
     # the test data has an extra column compared to the train data
