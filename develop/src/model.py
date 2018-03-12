@@ -21,9 +21,13 @@ def fit_model(data):
     Returns:
         A trained logistic regression model
     """
+    # get logger
+    logger = logging.getLogger(__name__)
+
     # notice that data contains both response and predictors
     # X matrix is all columns but "left", the response
     X = preprocess_for_sklearn(data.drop(["left"], axis=1))
+    print(X.shape)
     y = data.left
     logger.info('Data has been preprocessed for sklearn')
     # fit model
@@ -40,6 +44,9 @@ def pickle_model(model):
     Args:
         model: A trained model.
     """
+    # get logger
+    logger = logging.getLogger(__name__)
+    
     model_pkl = open(model_meta['directories']['pkl'], 'wb')
     pickle.dump(model, model_pkl)
     model_pkl.close()

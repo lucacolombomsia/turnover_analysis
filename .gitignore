@@ -19,6 +19,7 @@ train.csv
 #useless files
 .DS_Store
 *.pyc
+develop/tests/.pytest_cache/
 
 #log files
 *.log

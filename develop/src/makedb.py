@@ -7,7 +7,7 @@ import argparse
 import yaml
 
 
-def prep_tables():
+def prep_tables(path_data, path_random_names, size, seed):
     """
     Read the training data from csv.
     Randomly split the data in one training set and two test sets.
@@ -28,26 +28,26 @@ def prep_tables():
     """
     # get logger
     logger = logging.getLogger(__name__)
-    employees = pd.read_csv(model_meta['directories']['train_data'])
+    employees = pd.read_csv(path_data)
     logger.info('Read data from CSV')
     employees.insert(0, 'emp_ID', range(1, len(employees)+1))
     # holdout 1000 observation for bulk-loading and making prediction
     # this heldout data will simulate in-production data
     train, test = train_test_split(employees,
-                                   test_size=int(model_meta['test_size']),
-                                   random_state=model_meta['random'])
+                                   test_size=int(size),
+                                   random_state=seed)
     logger.info('Split train and test')
     test = test.reset_index(drop=True)
     # for test data, we add a name to each employee
-    test = test.join(pd.read_csv(model_meta['directories']['names']))
+    test = test.join(pd.read_csv(path_random_names))
     # drop the Y variable for the test data, so that it can play
     # the role of in-production data
     # this data will be used for bulk-load predictions
     test = test.drop(["left"], axis=1)
     logger.info('Transformed test data into fake in-production data')
     jul17, jan18 = train_test_split(test,
-                                    test_size=int(model_meta['test_size']/2),
-                                    random_state=model_meta['random'])
+                                    test_size=int(size/2),
+                                    random_state=seed)
     logger.info('Data ready to be written to db')
     return (train, jul17, jan18)
 
@@ -61,7 +61,10 @@ def write_tables():
     logger = logging.getLogger(__name__)
 
     # prepare tables using helper function
-    train, jul17, jan18 = prep_tables()
+    train, jul17, jan18 = prep_tables(model_meta['directories']['train_data'],
+                                      model_meta['directories']['names'],
+                                      model_meta['test_size'],
+                                      model_meta['random'])
     
     engine = create_engine(dbconfig.database_config)
     logger.info('Created engine for writing')

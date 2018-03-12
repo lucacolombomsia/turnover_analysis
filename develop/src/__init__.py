@@ -21,7 +21,8 @@ def read_data(table_name):
     """
     # setup log file
     log_fmt = '%(asctime)s - %(levelname)s - %(message)s'
-    logging.basicConfig(level=logging.INFO, format=log_fmt)
+    logging.basicConfig(filename='develop/logs/reads.log',
+                        level=logging.INFO, format=log_fmt)
     logger = logging.getLogger(__name__)
 
     engine = create_engine(dbconfig.database_config)
