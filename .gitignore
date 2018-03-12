@@ -8,6 +8,9 @@ develop/models/logistic.pkl
 turnover.csv
 train.csv
 
+#PPT presentation
+*.pptx
+
 #R files
 *.R
 *.Rhistory

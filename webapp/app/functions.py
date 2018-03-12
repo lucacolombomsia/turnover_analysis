@@ -10,6 +10,7 @@ sys.path.append('develop/')
 sys.path.append('develop/src')
 from src import read_data, preprocess_for_sklearn
 import src.dbconfig
+import yaml
 
 
 def import_model():
@@ -18,8 +19,12 @@ def import_model():
     Returns:
         The trained sklearn Logistic Regression model.
     """
-    pkl_filename = 'develop/models/logistic.pkl'
-    model_pkl = open(pkl_filename, 'rb')
+    # read in the yaml file
+    with open('params.yaml', 'r') as f:
+        model_meta = yaml.load(f)
+
+    # unpickle the model
+    model_pkl = open(model_meta['directories']['pkl'], 'rb')
     model = pickle.load(model_pkl)
     model_pkl.close()
     return model

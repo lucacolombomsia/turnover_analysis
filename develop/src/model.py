@@ -51,7 +51,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('meta_path', help="path of the yaml file")
     args = parser.parse_args()
-    #read in the yaml file
+    # read in the yaml file
     with open(args.meta_path, 'r') as f:
         model_meta = yaml.load(f)
 
