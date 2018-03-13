@@ -1,4 +1,5 @@
 import pandas as pd
+import yaml
 from sqlalchemy import create_engine
 from time import localtime, strftime
 import pickle
@@ -10,11 +11,10 @@ sys.path.append('develop/')
 sys.path.append('develop/src')
 from src import read_data, preprocess_for_sklearn
 import src.dbconfig
-import yaml
 
 
 def import_model():
-    """Unpickles the model that was previously fit on the training data.
+    """Unpickle the model that was previously fit on the training data.
 
     Returns:
         The trained sklearn Logistic Regression model.
@@ -31,7 +31,7 @@ def import_model():
 
 
 def read_prediction_form_data(form):
-    """Reads data inputted by the user in the Single Employee Evaluation form.
+    """Read data inputted by the user in the Single Employee Evaluation form.
 
     Args:
         form: The form where the user can input the data.
@@ -55,7 +55,7 @@ def read_prediction_form_data(form):
 
 
 def preprocess_prediction_form_data(form_data):
-    """Preprocesses data inputted by the user in the Single Employee
+    """Preprocess data inputted by the user in the Single Employee
     Evaluation form.
 
     The data that has been read from the form must be preprocessed
@@ -100,7 +100,7 @@ def preprocess_prediction_form_data(form_data):
 
 
 def write_prediction_form_data(form_data, prediction):
-    """Writes data inputted by the user to a database.
+    """Write data inputted by the user to a database.
 
     Args:
         form_data (list): A list with the data read from the form.
@@ -142,23 +142,23 @@ def write_prediction_form_data(form_data, prediction):
 
 
 def give_promotion(data):
-    """
-    Support function for the give_recommendation function.
+    """Modify data to study effect of promotion on probability of quitting.
+
+    This is a support function for the give_recommendation function.
     It takes the output of preprocess_prediction_form_data as input.
-    It modifies the processed data to "give a promotion" to our
+    It modifies the preprocessed data to "give a promotion" to our
     employee of interest.
     Example: if salary was low, it raises it to medium by changing
-    the appropriate dummy and setting the dummy for "received a promotion in
-    last 5 years" to 1.
+    the appropriate categorical variable and setting the dummy for
+    "received a promotion in last 5 years" to 1.
     The output of this function will be used to predict the effect of giving
     a promotion on the probability of quitting of our employee of interest.
 
     Args:
-        data: Form data preprocessed by the preprocess_prediction_form_data
-        function.
+        data: Form data after preprocessing.
 
     Returns:
-        Form data in the same format as the input, but with different values.
+        Data in the same format as the input, but with different values.
     """
     # set dummy on promotion equal to 1
     data[0][6] = 1
@@ -172,7 +172,8 @@ def give_promotion(data):
 
 
 def give_recommendation(proba, model, data):
-    """
+    """Give recommendation on action to take on evaluated user.
+
     Based on the predicted probability of quitting of the employee, suggest
     what actions should be taken (if any) to mitigate the risk of him/her
     quitting and how effective these actions are expected to be.
@@ -180,8 +181,7 @@ def give_recommendation(proba, model, data):
     Args:
         proba (float): predicted probability of quitting.
         model: model to be used for prediction.
-        data: Form data preprocessed by the preprocess_prediction_form_data
-        function.
+        data: Form data after preprocessing.
 
     Returns:
         list: A list of strings with the recommended actions to be
@@ -209,10 +209,11 @@ def give_recommendation(proba, model, data):
 
 
 def make_predictions(dbtable, model, n):
-    """
-    Bulk loads the data from a table in the AWS database and predicts for
+    """Predict probability of quitting of all employees in evaluation.
+
+    Bulk load the data from a table in the database and predict for
     each employee the probability he/she will quit.
-    The prediction is performed on the test data that we heldout from the
+    The prediction is performed on the test data that was heldout from the
     original data.
     This is meant to simulate in-production data that comes from the annual
     or biannual company-wide employee evaluation.
@@ -225,7 +226,7 @@ def make_predictions(dbtable, model, n):
         n (int): number of results to be shown.
 
     Returns:
-        dataframe: The n employees who are most likely to quit.
+        pd.dataframe: The n employees who are most likely to quit.
     """
     # read the data
     data = read_data(dbtable)
@@ -234,39 +235,49 @@ def make_predictions(dbtable, model, n):
     # make predictions and add predicted probability as a new column
     # to the original data after formatting
     predictions = list(model.predict_proba(X_matrix)[:, 1])
-    y_pred = [round(x*100,2) for x in predictions]
+    y_pred = [round(x*100, 2) for x in predictions]
     data['phat'] = y_pred
     # sort by the predicted probability
     data = data.sort_values(by='phat', ascending=False)
     # return the n employees who are most likely to quit
     return data.head(n)
 
+
 def format_predictions(table):
-    """
-    Takes the output of make_predictions (a table with the n employees
-    who are most likely to quit) and formats it before it is shown to the
+    """Format the table with the n most likely to quit employees.
+
+    Take the output of make_predictions (a table with the n employees
+    who are most likely to quit) and format it before it is shown to the
     user of the app.
 
     Args:
-        table (dataframe): Table with employees that are most likely to quit.
+        table (pd.dataframe): Table with most likely to quit employees.
 
     Returns:
-        dataframe: The formatted dataframe.
+        pd.dataframe: The formatted dataframe.
     """
-    table = table.drop(['number_project', 'average_montly_hours',
-                        'work_accident'], axis=1)
+    # make promotion column yes/no instead of 0/1
+    table['promotion'] = 'No'
+    table.loc[table.promotion_last_5years == 1, 'promotion'] = 'Yes'
+    # drop non-interesting columns
+    table = table.drop(['number_project', 'time_spend_company',
+                        'work_accident', 'promotion_last_5years'], axis=1)
+    # change order of the columns
     order = ['emp_id', 'name', 'satisfaction_level', 'last_evaluation',
-             'time_spend_company', 'promotion_last_5years', 'sales',
-             'salary','phat']
+             'promotion', 'salary', 'average_montly_hours',
+             'sales', 'phat']
     table = table[order]
+    # make sure capitalization of words is nicely taken care of
     table.sales = table.sales.str.capitalize()
-    table.loc[table.sales=='Hr', 'sales'] = 'HR'
-    table.loc[table.sales=='Randd', 'sales'] = 'R&D'
-    table.loc[table.sales=='It', 'sales'] = 'IT'
+    table.loc[table.sales == 'Hr', 'sales'] = 'HR'
+    table.loc[table.sales == 'Randd', 'sales'] = 'R&D'
+    table.loc[table.sales == 'It', 'sales'] = 'IT'
     table.salary = table.salary.str.capitalize()
+    # rename columns
     names = ['Employee ID', 'Name', 'Satisfaction Level', 'Last Evaluation',
-             'Tenure', 'Promotion in last 5 years', 'Deparment',
-             'Salary category', 'Predicted probability of quitting']
+             'Promotion in last 5 years', 'Salary category',
+             'Monthly hours', 'Deparment',
+             'Probability of quitting']
     table.columns = names
 
     return table

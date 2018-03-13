@@ -17,14 +17,16 @@ class PredictionForm(FlaskForm):
                             validators=[DataRequired(),
                                         NumberRange(min=0, max=1)])
     int_msg = "Please input an integer larger than 0"
-    projects = IntegerField('Number of projects employee has worked on in the last 12 months',
-                            validators=[NumberRange(min=1, message=int_msg)])
+    projects = IntegerField(
+            'Number of projects employee has worked on in the last 12 months',
+            validators=[NumberRange(min=1, message=int_msg)])
     hours = IntegerField('Average monthly hours',
                          validators=[NumberRange(min=1, message=int_msg)])
     tenure = IntegerField('Tenure (in years)',
                           validators=[NumberRange(min=1, message=int_msg)])
     accident = BooleanField('Was the employee ever injured at work?')
-    promotion = BooleanField('Did the employee get a promotion in last 5 years?')
+    promotion = BooleanField(
+            'Did the employee get a promotion in last 5 years?')
     department = SelectField('Department',
                              validators=[DataRequired()],
                              choices=[('drop', "Accounting"),
@@ -63,9 +65,11 @@ class DatabaseForm(FlaskForm):
     The user can choose the date of the employee evaluation of interest
     and the number of results to be displayed.
     """
-    date = DateField('Month and year of Corporate Performance Review of interest',
-                     format='%Y-%m', validators=[validate_dates])
+    date = DateField(
+            'Month and year of Corporate Performance Review of interest',
+            format='%Y-%m', validators=[validate_dates])
     number = IntegerField('Number of results to display',
-                          validators=[NumberRange(min=1, message="An integer larger than 0")],
+                          validators=[NumberRange(
+                                  min=1, message="An integer larger than 0")],
                           default=10)
     submit = SubmitField('Submit')
