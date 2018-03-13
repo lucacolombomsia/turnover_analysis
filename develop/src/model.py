@@ -11,12 +11,14 @@ from src import read_data, preprocess_for_sklearn
 
 
 def fit_model(data):
-    """
-    Fit a logistic regression on the training data that has been
-    read from the database.
+    """Fit a logistic regression on the training data.
+
+    The input should be the training data read from the database.
+    The output of this function should be fed to the pickle_model function
+    so that the model can be pickled and stored for future use.
 
     Args:
-        data (pandas.DataFrame): The training data read from database.
+        data (pd.DataFrame): The training data read from database.
 
     Returns:
         A trained logistic regression model
@@ -27,7 +29,6 @@ def fit_model(data):
     # notice that data contains both response and predictors
     # X matrix is all columns but "left", the response
     X = preprocess_for_sklearn(data.drop(["left"], axis=1))
-    print(X.shape)
     y = data.left
     logger.info('Data has been preprocessed for sklearn')
     # fit model
@@ -38,15 +39,14 @@ def fit_model(data):
 
 
 def pickle_model(model):
-    """
-    Take a trained model and write it into a pickle file.
+    """Take a trained model and write it into a pickle file.
 
     Args:
         model: A trained model.
     """
     # get logger
     logger = logging.getLogger(__name__)
-    
+
     model_pkl = open(model_meta['directories']['pkl'], 'wb')
     pickle.dump(model, model_pkl)
     model_pkl.close()

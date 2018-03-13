@@ -1,12 +1,10 @@
 import dbconfig
 from sqlalchemy import create_engine
 import pandas as pd
-import logging
 
 
 def read_data(table_name):
-    """
-    Read the data from a specified table in the database.
+    """Read the data from a specified table in the database.
 
     This function can be used to query both the train set (used to fit model)
     and the "in-production" data (used to make bulk predictions).
@@ -26,19 +24,18 @@ def read_data(table_name):
 
 
 def preprocess_for_sklearn(data):
-    """
-    Preprocess the data into a format compatible with sklearn.
+    """Preprocess the data into a format compatible with sklearn.
 
-    Sklearn requires all categorical variables to be converted 
+    Sklearn requires all categorical variables to be converted
     into dummies.
     The input is a dataframe of predictors, either from the train
     or the in-production data.
 
     Args:
-        data (dataframe): The dataframe with the data to be preprocessed.
+        data (pd.dataframe): The dataframe with the data to be preprocessed.
 
     Returns:
-        dataframe: A dataframe with the processed data.
+        pd.dataframe: A dataframe with the processed data.
     """
     data.columns = map(str.lower, data.columns)
     data.sales = data.sales.str.lower()

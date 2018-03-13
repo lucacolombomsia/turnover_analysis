@@ -8,8 +8,8 @@ import yaml
 
 
 def prep_tables(path_data, path_random_names, size, seed):
-    """
-    Read the training data from csv.
+    """Read the training data from csv and prepare for writing to db.
+
     Randomly split the data in one training set and two test sets.
     The two test sets will simulate in-production data and will be
     queried by the web app.
@@ -22,8 +22,14 @@ def prep_tables(path_data, path_random_names, size, seed):
     It returns 3 dataframes that write_tables will write into a
     database.
 
+    Args:
+        path_data (str): Path of the csv with the original data
+        path_random_names (str): Path of the csv with names of employees
+        size (str): Size of the test set for the train/test split
+        seed (int): Random state for train/test split
+
     Returns:
-        tuple: A tuple with the 3 dataframes.
+        tuple: A tuple with the 3 pd.dataframes.
 
     """
     # get logger
@@ -48,14 +54,17 @@ def prep_tables(path_data, path_random_names, size, seed):
     jul17, jan18 = train_test_split(test,
                                     test_size=int(size/2),
                                     random_state=seed)
+    jul17 = jul17.reset_index(drop=True)
+    jan18 = jan18.reset_index(drop=True)
     logger.info('Data ready to be written to db')
     return (train, jul17, jan18)
 
 
 def write_tables():
-    """
+    """Write tables to database.
+
     Take the output of the function prep_tables (3 dataframes) and write each
-    of them in a different table in the database.
+    one of them in a different table in the database.
     """
     # get logger
     logger = logging.getLogger(__name__)
@@ -65,7 +74,7 @@ def write_tables():
                                       model_meta['directories']['names'],
                                       model_meta['test_size'],
                                       model_meta['random'])
-    
+
     engine = create_engine(dbconfig.database_config)
     logger.info('Created engine for writing')
     jul17.to_sql(name='employees_eval_jul17', con=engine,
