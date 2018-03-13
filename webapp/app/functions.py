@@ -232,10 +232,41 @@ def make_predictions(dbtable, model, n):
     # preprocess it
     X_matrix = preprocess_for_sklearn(data)
     # make predictions and add predicted probability as a new column
-    # to the original data
-    y_pred = pd.DataFrame({"phat": model.predict_proba(X_matrix)[:, 1]})
-    data = data.join(y_pred)
+    # to the original data after formatting
+    predictions = list(model.predict_proba(X_matrix)[:, 1])
+    y_pred = [round(x*100,2) for x in predictions]
+    data['phat'] = y_pred
     # sort by the predicted probability
     data = data.sort_values(by='phat', ascending=False)
     # return the n employees who are most likely to quit
     return data.head(n)
+
+def format_predictions(table):
+    """
+    Takes the output of make_predictions (a table with the n employees
+    who are most likely to quit) and formats it before it is shown to the
+    user of the app.
+
+    Args:
+        table (dataframe): Table with employees that are most likely to quit.
+
+    Returns:
+        dataframe: The formatted dataframe.
+    """
+    table = table.drop(['number_project', 'average_montly_hours',
+                        'work_accident'], axis=1)
+    order = ['emp_id', 'name', 'satisfaction_level', 'last_evaluation',
+             'time_spend_company', 'promotion_last_5years', 'sales',
+             'salary','phat']
+    table = table[order]
+    table.sales = table.sales.str.capitalize()
+    table.loc[table.sales=='Hr', 'sales'] = 'HR'
+    table.loc[table.sales=='Randd', 'sales'] = 'R&D'
+    table.loc[table.sales=='It', 'sales'] = 'IT'
+    table.salary = table.salary.str.capitalize()
+    names = ['Employee ID', 'Name', 'Satisfaction Level', 'Last Evaluation',
+             'Tenure', 'Promotion in last 5 years', 'Deparment',
+             'Salary category', 'Predicted probability of quitting']
+    table.columns = names
+
+    return table

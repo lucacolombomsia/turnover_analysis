@@ -63,7 +63,7 @@ def test_preprocess_allnumeric():
     assert (sum(is_number(preprocess_for_sklearn(data).dtypes)) == 
             preprocess_for_sklearn(data).shape[1])
 
-##### fit a model
+# fit a model
 model = src.model.fit_model(prep_table[0])
 
 def test_model_type():

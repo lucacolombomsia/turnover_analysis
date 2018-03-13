@@ -9,13 +9,14 @@ h1              { border-bottom: 2px solid #eee; }
 h2              { font-size: 1.2em; }
 
 table.dataframe, .dataframe th, .dataframe td {
-  border: none;
+  border: 1px solid #ddd;
   border-bottom: 1px solid #C8C8C8;
   border-collapse: collapse;
   text-align:left;
   padding: 10px;
   margin-bottom: 40px;
   font-size: 0.9em;
+  text-align: center
 }
 
 tr:nth-child(odd)	{ background-color:#eee; }

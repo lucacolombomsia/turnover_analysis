@@ -10,21 +10,21 @@ class PredictionForm(FlaskForm):
     The form that will be used to collect the user input to make predictions
     on a single employee.
     """
-    satisfaction = FloatField('Satisfaction Level',
+    satisfaction = FloatField("Satisfaction Level",
                               validators=[DataRequired(),
                                           NumberRange(min=0, max=1)])
-    evaluation = FloatField('Last Evaluation',
+    evaluation = FloatField("Last Employee Evaluation grade",
                             validators=[DataRequired(),
                                         NumberRange(min=0, max=1)])
     int_msg = "Please input an integer larger than 0"
-    projects = IntegerField('Number of projects',
+    projects = IntegerField('Number of projects employee has worked on in the last 12 months',
                             validators=[NumberRange(min=1, message=int_msg)])
     hours = IntegerField('Average monthly hours',
                          validators=[NumberRange(min=1, message=int_msg)])
-    tenure = IntegerField('Tenure',
+    tenure = IntegerField('Tenure (in years)',
                           validators=[NumberRange(min=1, message=int_msg)])
-    accident = BooleanField('Work Accident')
-    promotion = BooleanField('Promotion in last 5 years')
+    accident = BooleanField('Was the employee ever injured at work?')
+    promotion = BooleanField('Did the employee get a promotion in last 5 years?')
     department = SelectField('Department',
                              validators=[DataRequired()],
                              choices=[('drop', "Accounting"),
@@ -37,7 +37,7 @@ class PredictionForm(FlaskForm):
                                       ('13', "Sales"),
                                       ('14', "Support"),
                                       ('15', "Technical")])
-    salary = SelectField('Salary',
+    salary = SelectField('Salary category',
                          validators=[DataRequired()],
                          choices=[('16', "Low"),
                                   ('17', "Medium"),
@@ -63,7 +63,7 @@ class DatabaseForm(FlaskForm):
     The user can choose the date of the employee evaluation of interest
     and the number of results to be displayed.
     """
-    date = DateField('Month and year of Employee Evaluation of interest',
+    date = DateField('Month and year of Corporate Performance Review of interest',
                      format='%Y-%m', validators=[validate_dates])
     number = IntegerField('Number of results to display',
                           validators=[NumberRange(min=1, message="An integer larger than 0")],

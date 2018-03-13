@@ -19,17 +19,9 @@ def read_data(table_name):
     Returns:
         pandas.DataFrame: A dataframe with the data read from database.
     """
-    # setup log file
-    log_fmt = '%(asctime)s - %(levelname)s - %(message)s'
-    logging.basicConfig(filename='develop/logs/reads.log',
-                        level=logging.INFO, format=log_fmt)
-    logger = logging.getLogger(__name__)
-
     engine = create_engine(dbconfig.database_config)
-    logger.info('Created engine for reading')
     sql = "select * from " + table_name
     data = pd.read_sql_query(sql, con=engine)
-    logger.info('Succesfully read data')
     return data
 
 
