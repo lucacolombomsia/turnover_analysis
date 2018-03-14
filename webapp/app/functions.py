@@ -170,6 +170,14 @@ def give_promotion(data):
         data[0][16:18] = [0, 0]
     return data
 
+def increase_satisfaction(data):
+    data[0][0] = min(1, data[0][0] + 0.1)
+    return data
+
+def reduce_workload(data):
+    data[0][3] = int(data[0][0]*0.9)
+    return data
+
 
 def give_recommendation(proba, model, data):
     """Give recommendation on action to take on evaluated user.
@@ -187,21 +195,38 @@ def give_recommendation(proba, model, data):
         list: A list of strings with the recommended actions to be
         displayed in the results page.
     """
-    # historical data suggests that the company should act whenever the
-    # predicted probability of quitting is above 25%
-    if proba > 25:
-        text = ["""Historical data suggests that actions should be taken to
-                reduce the risk of an employee quitting whenever his or
-                her predicted probability of quitting is above 25%."""]
+    if proba >= 50:
+        text = ["""Historical data suggests that actions should be taken
+                to reduce the risk that this employee will quit."""]
         # make prediction on the "new data", as modified by the
         # give_promotion function
-        y_hat_prime = model.predict_proba(give_promotion(data))[0][1]
-        # round number for nice formatting
-        y_hat_prime = round(y_hat_prime*100, 2)
-        if proba != y_hat_prime:
+        y_hat_promotion = model.predict_proba(give_promotion(data))[0][1]
+        y_hat_promotion = round(y_hat_promotion*100, 2)
+        # make prediction on the "new data", as modified by the
+        # increase_satisfaction function
+        y_hat_satisf = model.predict_proba(increase_satisfaction(data))[0][1]
+        y_hat_satisf = round(y_hat_satisf*100, 2)
+        # make prediction on the "new data", as modified by the
+        # reduce_workload function
+        y_hat_work = model.predict_proba(reduce_workload(data))[0][1]
+        y_hat_work = round(y_hat_work*100, 2)
+        
+        if proba > y_hat_promotion:
             text += ['''Offering a promotion to this employee would lower
             the probability with which he or she will quit
-            to {}%'''.format(y_hat_prime)]
+            to {}%'''.format(y_hat_promotion)]
+
+        if proba > y_hat_satisf:
+            text += ['''Increasing this employee's satisfaction by one
+            tenth of a point would lower
+            the probability with which he or she will quit
+            to {}%'''.format(y_hat_satisf)]
+
+        if proba > y_hat_work:
+            text += ['''Reducing this employee's workload by 10 percent
+            would lower the probability with which he or she will quit
+            to {}%'''.format(y_hat_work)]
+            
     else:
         text = ["""It is unlikely that this employee will quit. No action
                 needs to be taken."""]

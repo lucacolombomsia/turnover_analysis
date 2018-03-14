@@ -1,4 +1,4 @@
-from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 import pickle
 import logging
 import argparse
@@ -32,10 +32,10 @@ def fit_model(data):
     y = data.left
     logger.info('Data has been preprocessed for sklearn')
     # fit model
-    logreg = LogisticRegression()
-    logreg.fit(X, y)
+    clf = RandomForestClassifier(max_depth=15, random_state=45, n_estimators=200)
+    clf.fit(X, y)
     logger.info('Model has been fit')
-    return logreg
+    return clf
 
 
 def pickle_model(model):

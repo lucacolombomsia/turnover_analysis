@@ -1,5 +1,5 @@
 directories:
-  pkl: develop/models/logistic.pkl
+  pkl: develop/models/rand_forest.pkl
   train_data: develop/data/turnover.csv
   names: develop/data/random-names.csv
   log: develop/logs/develop.log
