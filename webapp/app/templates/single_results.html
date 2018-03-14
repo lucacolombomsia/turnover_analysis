@@ -4,10 +4,21 @@
 	<h1 align="center">Thanks for using the Turnover Analysis web app!</h1>
 
 	<div align="center" class = "subtitle">
-		The employee will quit with a probability of {{perc}}%<br>
-	  	{% for sentence in sentences %}
-	  	    {{ sentence }}<br><br>
-	  	{% endfor %}
+		The employee will quit with a probability of {{perc}}%<br><br>
+	  	{{text1}}<br>
+		
+		{% if text2 is defined %}
+		{{text2}}
+			<div align='left'>
+			<ul>
+				{% for sentence in sentences %}
+					<li>{{ sentence }}
+			    {% endfor %}
+			</ul>
+		</div>
+
+		{% endif %}
+		
     </div>
 {% endblock %}
 

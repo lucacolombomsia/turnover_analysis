@@ -34,8 +34,20 @@ def single_emp():
         # use the giverecommendation function to find out
         text = give_recommendation(y_pred, model, prep_data)
         # show results
-        return render_template('single_results.html',
-                               perc=y_pred, sentences=text)
+        if len(text) > 1:
+            return render_template('single_results.html',
+                                   perc=y_pred,
+                                   text1=text[0],
+                                   text2=text[1],
+                                   sentences=text[2:len(text)],
+                                   num3 = '12%',
+                                   num4 = '12%',
+                                   num5 = '12%')
+        else:
+            return render_template('single_results.html',
+                                   perc=y_pred,
+                                   text1=text[0])
+
     return render_template('single_form.html', form=form)
 
 

@@ -198,6 +198,7 @@ def give_recommendation(proba, model, data):
     if proba >= 50:
         text = ["""Historical data suggests that actions should be taken
                 to reduce the risk that this employee will quit."""]
+        text += ['Possible actions include:']
         # make prediction on the "new data", as modified by the
         # give_promotion function
         y_hat_promotion = model.predict_proba(give_promotion(data))[0][1]
@@ -226,7 +227,7 @@ def give_recommendation(proba, model, data):
             text += ['''Reducing this employee's workload by 10 percent
             would lower the probability with which he or she will quit
             to {}%'''.format(y_hat_work)]
-            
+
     else:
         text = ["""It is unlikely that this employee will quit. No action
                 needs to be taken."""]
