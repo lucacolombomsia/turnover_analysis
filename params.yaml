@@ -4,6 +4,11 @@ directories:
   names: develop/data/random-names.csv
   log: develop/logs/develop.log
 
+model:
+  ntrees: 200
+  seed: 45
+  max_depth: 15
+
 random: 12345
 
 test_size: 1000

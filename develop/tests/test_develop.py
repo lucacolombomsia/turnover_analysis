@@ -75,12 +75,15 @@ def test_preprocess_allnumeric():
 # will store the fitted model in an object that we can use for testing
 # also, read test_data
 training_data = prep_table[0]
-model = src.model.fit_model(training_data)
+model = src.model.fit_model(training_data,
+                            depth = model_meta['model']['max_depth'],
+                            seed = model_meta['model']['seed'],
+                            ntrees = model_meta['model']['ntrees'])
 test_data = np.array([preprocess_for_sklearn(prep_table[1]).loc[0,:]])
 
 def test_model_type():
-    """Check fit_model returns a sklearn Logistic Regression model."""
-    assert isinstance(model, sklearn.linear_model.LogisticRegression)
+    """Check fit_model returns a sklearn Random Forest Classifier model."""
+    assert isinstance(model, sklearn.ensemble.forest.RandomForestClassifier)
 
 def test_model_prediction():
     """

@@ -211,22 +211,23 @@ def give_recommendation(proba, model, data):
         # reduce_workload function
         y_hat_work = model.predict_proba(reduce_workload(data))[0][1]
         y_hat_work = round(y_hat_work*100, 2)
-        
+
         if proba > y_hat_promotion:
-            text += ['''Offering a promotion to this employee would lower
-            the probability with which he or she will quit
-            to {}%'''.format(y_hat_promotion)]
+            y_hat_promotion = str(y_hat_promotion) + '%'
+            text += [{'words': '''Offering a promotion; this would lower
+            the probability of quitting to ''', 'num': y_hat_promotion}]
 
         if proba > y_hat_satisf:
-            text += ['''Increasing this employee's satisfaction by one
-            tenth of a point would lower
-            the probability with which he or she will quit
-            to {}%'''.format(y_hat_satisf)]
+            y_hat_satisf = str(y_hat_satisf) + '%'
+            text += [{'words':'''Increasing the satisfaction level by one
+            tenth of a point; this would lower the probability of
+            quitting to ''', 'num': y_hat_satisf}]
 
         if proba > y_hat_work:
-            text += ['''Reducing this employee's workload by 10 percent
-            would lower the probability with which he or she will quit
-            to {}%'''.format(y_hat_work)]
+            y_hat_work = str(y_hat_work) + '%'
+            text += [{'words': '''Reducing the workload by 10 percent;
+            this would lower the probability of quitting to ''', 
+            'num': y_hat_work}]
 
     else:
         text = ["""It is unlikely that this employee will quit. No action
@@ -286,12 +287,12 @@ def format_predictions(table):
     table['promotion'] = 'No'
     table.loc[table.promotion_last_5years == 1, 'promotion'] = 'Yes'
     # drop non-interesting columns
-    table = table.drop(['number_project', 'time_spend_company',
+    table = table.drop(['number_project', 'phat',
                         'work_accident', 'promotion_last_5years'], axis=1)
     # change order of the columns
     order = ['emp_id', 'name', 'satisfaction_level', 'last_evaluation',
              'promotion', 'salary', 'average_montly_hours',
-             'sales', 'phat']
+             'sales', 'time_spend_company']
     table = table[order]
     # make sure capitalization of words is nicely taken care of
     table.sales = table.sales.str.capitalize()
@@ -303,7 +304,7 @@ def format_predictions(table):
     names = ['Employee ID', 'Name', 'Satisfaction Level', 'Last Evaluation',
              'Promotion in last 5 years', 'Salary category',
              'Monthly hours', 'Deparment',
-             'Probability of quitting']
+             'Tenure in years']
     table.columns = names
 
     return table

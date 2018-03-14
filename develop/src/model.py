@@ -10,7 +10,7 @@ sys.path.append('develop/')
 from src import read_data, preprocess_for_sklearn
 
 
-def fit_model(data):
+def fit_model(data, depth, seed, ntrees):
     """Fit a logistic regression on the training data.
 
     The input should be the training data read from the database.
@@ -32,7 +32,9 @@ def fit_model(data):
     y = data.left
     logger.info('Data has been preprocessed for sklearn')
     # fit model
-    clf = RandomForestClassifier(max_depth=15, random_state=45, n_estimators=200)
+    clf = RandomForestClassifier(max_depth = depth,
+                                 random_state = seed,
+                                 n_estimators = ntrees)
     clf.fit(X, y)
     logger.info('Model has been fit')
     return clf
@@ -68,4 +70,9 @@ if __name__ == "__main__":
                         level=logging.INFO, format=log_fmt)
     logger = logging.getLogger(__name__)
 
-    pickle_model(fit_model(read_data("employees_hist_data")))
+    model = fit_model(read_data("employees_hist_data"),
+                      depth = model_meta['model']['max_depth'],
+                      seed = model_meta['model']['seed'],
+                      ntrees = model_meta['model']['ntrees'])
+
+    pickle_model(model)

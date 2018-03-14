@@ -30,13 +30,19 @@ tr:hover            { background-color: #ffff99;}
 
 div.padding {
     padding-top: 16px;
-    padding-left: 16px
+    padding-left: 16px;
+	padding-right: 16px
     
 }
 
 div.subtitle {
     padding-top: 8px;
     
+}
+
+div.bullet {
+	width: 80%;
+	margin: 0 auto;
 }
 
 .topnav {
