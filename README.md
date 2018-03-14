@@ -8,7 +8,7 @@ The final goal of this project is to enable HR professionals and team managers t
 
 **Mission**: develop a model that evaluates the probability that each employee will quit and that helps inform the decision on whether or not to take action –and which action to take– to mitigate employee flight risk.    
 
-**Success criteria**: the model can accurately predict the probability that an employee will quit, as measured by AUC, Recall and the Correct Classification Rate. 
+**Success criteria**: the Random Forest model can accurately predict the probability that an employee will quit, as measured by Accuracy (98% on test data) and Recall (95% on test data). 
 
 
 ## Package requirements
