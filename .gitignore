@@ -2,7 +2,7 @@
 turnover/
 
 #trained model
-develop/models/logistic.pkl
+*.pkl
 
 #original data
 turnover.csv
@@ -16,6 +16,7 @@ test.csv
 *.R
 *.Rhistory
 *.Rproj
+.Rproj.user
 
 #useless files
 .DS_Store
@@ -28,10 +29,9 @@ develop/tests/.pytest_cache/
 #secrets
 turnover.env
 
-# Jupyter NB Checkpoints
+#Jupyter NB files
 .ipynb_checkpoints/
-.Rproj.user
-
+develop/notebooks/config.py
 
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
