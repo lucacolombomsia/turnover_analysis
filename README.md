@@ -1,5 +1,11 @@
 # Turnover Analysis
 
+MSiA 493: Analytics Value Chain - Team 10
+Developer: Luca Colombo
+QA: Tucker Lewis
+PO: Ethel Zhang
+
+
 ## Project Charter
 A high turnover rate can seriously impact a company’s ability to be successful, as it causes high monetary costs and losses of human capital. The model developed in this project will predict the likelihood that current employees will leave the company and will therefore help understand what are the most relevant reasons behind an employee’s decision to voluntary terminate his employment – for example: low satisfaction, excessive workload, lack of career progression.   
 The final goal of this project is to enable HR professionals and team managers to work conjunctly to retain the best talent.
@@ -8,7 +14,9 @@ The final goal of this project is to enable HR professionals and team managers t
 
 **Mission**: develop a model that evaluates the probability that each employee will quit and that helps inform the decision on whether or not to take action –and which action to take– to mitigate employee flight risk.    
 
-**Success criteria**: the Random Forest model can accurately predict the probability that an employee will quit, as measured by Accuracy (98% on test data) and Recall (95% on test data). 
+**Success criteria**: The model should be able to predict the probability that an employee will quit with a satisfactory level of accuracy (more than 90%) and recall (more than 85%).
+
+The pivotal tracker page for this project can be reached by clicking on [this link](https://www.pivotaltracker.com/n/projects/2142055)
 
 
 ## Package requirements
@@ -42,6 +50,7 @@ The final goal of this project is to enable HR professionals and team managers t
 4. Set up turnover.env file with the following structure:
 
     ```
+    export SECRET_KEY=XXX
     export DATABASE=XXX
     export USERNAME=XXX
     export PORT=XXX
@@ -61,7 +70,7 @@ The final goal of this project is to enable HR professionals and team managers t
     wget -O develop/data/turnover.csv https://www.dropbox.com/s/qnu09f9xo30njvc/turnover.csv?dl=1
     ```
 
-7. OPTIONAL STEP. If you want to run unit tests before running the code, you can do so by following the following instructions.
+7. OPTIONAL STEP. If you want to run unit tests before running the code, run the following commands:
 
     ```
     cd develop/tests
@@ -83,5 +92,9 @@ The final goal of this project is to enable HR professionals and team managers t
 
 You can then go to the IP address where the app is running and use the app.
 
-## Pivotal tracker
-The pivotal tracker page for this project can be reached by clicking on [this link](https://www.pivotaltracker.com/n/projects/2142055)
+
+## Repository structure
+There are 3 main directories in this repository:
+* develop: it contains Python scripts to set up the relational database and fit the model;
+* webapp: it contains Python scripts, HTML files and CSS files to develop the app;
+* sphinx: it contains all the files relative to the Sphinx documentation. 
