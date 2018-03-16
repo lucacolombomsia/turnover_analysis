@@ -1,6 +1,6 @@
 # Turnover Analysis
 
-*MSiA 493: Analytics Value Chain - Team 10*
+*MSiA 493: Analytics Value Chain - Team 10*   
 **Developer**: Luca Colombo   
 **QA**: Tucker Lewis   
 **PO**: Ethel Zhang   
