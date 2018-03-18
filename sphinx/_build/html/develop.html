@@ -43,22 +43,61 @@
   <div class="section" id="module-makedb">
 <span id="data-ingestion-and-model-fitting"></span><h1>Data ingestion and model fitting<a class="headerlink" href="#module-makedb" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="makedb.make_tables">
-<code class="descclassname">makedb.</code><code class="descname">make_tables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#makedb.make_tables" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads the training data from csv.
-Randomly splits the data in one training set and two test sets.
-Writes each dataset to a different table in the database.</p>
+<dt id="makedb.prep_tables">
+<code class="descclassname">makedb.</code><code class="descname">prep_tables</code><span class="sig-paren">(</span><em>path_data</em>, <em>path_random_names</em>, <em>size</em>, <em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#makedb.prep_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the training data from csv and prepare for writing to db.</p>
+<p>Randomly split the data in one training set and two test sets.
+The two test sets will simulate in-production data and will be
+queried by the web app.
+Since they will be used for prediction, drop response variable
+for all observations in the test sets.
+Also, add fake name to each employee in the test sets to better
+simulate in-production data.</p>
+<p>This is a support function for write_tables.
+It returns 3 dataframes that write_tables will write into a
+database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path_data</strong> (<em>str</em>) – Path of the csv with the original data</li>
+<li><strong>path_random_names</strong> (<em>str</em>) – Path of the csv with names of employees</li>
+<li><strong>size</strong> (<em>str</em>) – Size of the test set for the train/test split</li>
+<li><strong>seed</strong> (<em>int</em>) – Random state for train/test split</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A tuple with the 3 pd.dataframes.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="makedb.write_tables">
+<code class="descclassname">makedb.</code><code class="descname">write_tables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#makedb.write_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write tables to database.</p>
+<p>Take the output of the function prep_tables (3 dataframes) and write each
+one of them in a different table in the database.</p>
 </dd></dl>
 
 <span class="target" id="module-model"></span><dl class="function">
 <dt id="model.fit_model">
 <code class="descclassname">model.</code><code class="descname">fit_model</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#model.fit_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes the training data that has been read from the database and fits a Logistic Regression model.</p>
+<dd><p>Fit a logistic regression on the training data.</p>
+<p>The input should be the training data read from the database.
+The output of this function should be fed to the pickle_model function
+so that the model can be pickled and stored for future use.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>tuple</em>) – Tuple with X matrix and Y vector.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>pd.DataFrame</em>) – The training data read from database.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A trained logistic regression model</td>
 </tr>
@@ -69,7 +108,7 @@ Writes each dataset to a different table in the database.</p>
 <dl class="function">
 <dt id="model.pickle_model">
 <code class="descclassname">model.</code><code class="descname">pickle_model</code><span class="sig-paren">(</span><em>model</em><span class="sig-paren">)</span><a class="headerlink" href="#model.pickle_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes a trained model and writes it into a pickle file.</p>
+<dd><p>Take a trained model and write it into a pickle file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -83,18 +122,20 @@ Writes each dataset to a different table in the database.</p>
 <span class="target" id="module-__init__"></span><dl class="function">
 <dt id="__init__.preprocess_for_sklearn">
 <code class="descclassname">__init__.</code><code class="descname">preprocess_for_sklearn</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__.preprocess_for_sklearn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Preprocesses the data for all the predictors into a format that is compatible with sklearn,
-by converting all categorical variables into dummies.
-The preprocessed data can be used both to train the model and to make predictions on the test set.</p>
+<dd><p>Preprocess the data into a format compatible with sklearn.</p>
+<p>Sklearn requires all categorical variables to be converted
+into dummies.
+The input is a dataframe of predictors, either from the train
+or the in-production data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>dataframe</em>) – The dataframe with the data to be preprocessed.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>pd.dataframe</em>) – The dataframe with the data to be preprocessed.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dataframe with the processed data.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dataframe</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">pd.dataframe</td>
 </tr>
 </tbody>
 </table>
@@ -103,17 +144,20 @@ The preprocessed data can be used both to train the model and to make prediction
 <dl class="function">
 <dt id="__init__.read_data">
 <code class="descclassname">__init__.</code><code class="descname">read_data</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__.read_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads the data from a specified table in the database.
-It can be used to query both the train and the test set.
-When asked to read the table that contains the training data, it will return a tuple
-with the data from all the predictors (the X matrix) and the data for the response (the Y vector).
-When asked to read a table that contains the test data, it will return a pandas dataframe
-with the data from all the predictors (the X matrix).</p>
+<dd><p>Read the data from a specified table in the database.</p>
+<p>This function can be used to query both the train set (used to fit model)
+and the “in-production” data (used to make bulk predictions).
+This function will always return a dataframe with all columns stored
+in the table that it is asked to query.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<em>str</em>) – Name of table to be queried</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dataframe with the data read from database.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">pandas.DataFrame</td>
 </tr>
 </tbody>
 </table>

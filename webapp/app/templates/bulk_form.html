@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Find the employees that are most likely to quit</h1>
-	<div class="subtitle">Enter values in the fields, then click "Submit"</div>
+	<div class="subtitle">Enter values in the fields, then click "Submit"
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
@@ -21,4 +21,5 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
+	</div>
 {% endblock %}

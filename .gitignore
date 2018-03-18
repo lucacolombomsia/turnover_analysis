@@ -1,16 +1,38 @@
+#virtual environment
 turnover/
 
-develop/src/secret_config.py
+#trained model
+*.pkl
 
-*.csv
+#original data
+turnover.csv
+train.csv
+test.csv
+
+#PPT presentation
+*.pptx
+
+#R files
+*.R
 *.Rhistory
 *.Rproj
-
-.DS_Store
-
-.env
-*.pyc
-
-# Jupyter NB Checkpoints
-.ipynb_checkpoints/
 .Rproj.user
+
+#useless files
+.DS_Store
+*.pyc
+develop/tests/.pytest_cache/
+
+#log files
+*.log
+
+#secrets
+turnover.env
+
+#Jupyter NB files
+.ipynb_checkpoints/
+develop/notebooks/config.py
+
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
