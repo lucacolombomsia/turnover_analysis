@@ -33,7 +33,7 @@ The pivotal tracker page for this project can be reached by clicking on [this li
 There are 3 main directories in this repository:
 * develop: it contains Python scripts to set up the relational database and fit the model;
 * webapp: it contains Python scripts, HTML files and CSS files to develop the app;
-* sphinx: it contains all the files relative to the Sphinx documentation. 
+* sphinx: it contains all the files relative to the Sphinx documentation. The final version of the documentation can be found at `/sphinx/_build/html/index.html`.
 
 
 ## Suggested steps to deploy app
