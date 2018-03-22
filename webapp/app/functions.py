@@ -203,7 +203,7 @@ def reduce_workload(data):
     Returns:
         Data in the same format as the input, but with different values.
     """
-    data[0][3] = int(data[0][0]*0.9)
+    data[0][3] = int(data[0][3]*0.9)
     return data
 
 
