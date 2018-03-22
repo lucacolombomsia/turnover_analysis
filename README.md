@@ -28,7 +28,14 @@ The pivotal tracker page for this project can be reached by clicking on [this li
 * [pandas](https://pandas.pydata.org/). pandas is an open source library that provides easy-to-use data structures and data analysis tools for Python.
 * [scikit-learn](http://scikit-learn.org/stable/). scikit-learn provides simple and efficient tools for machine learning and data analysis in Python.
 
- 
+
+## Repository structure
+There are 3 main directories in this repository:
+* develop: it contains Python scripts to set up the relational database and fit the model;
+* webapp: it contains Python scripts, HTML files and CSS files to develop the app;
+* sphinx: it contains all the files relative to the Sphinx documentation. 
+
+
 ## Suggested steps to deploy app
 
 1. Clone repository.
@@ -70,7 +77,7 @@ The pivotal tracker page for this project can be reached by clicking on [this li
     wget -O develop/data/turnover.csv https://www.dropbox.com/s/qnu09f9xo30njvc/turnover.csv?dl=1
     ```
 
-7. OPTIONAL STEP. If you want to run unit tests before running the code, run the following commands:
+7. OPTIONAL STEP. If you want to run unit tests on the code in the develop directory before running it, type the following in your command line:
 
     ```
     cd develop/tests
@@ -84,17 +91,18 @@ The pivotal tracker page for this project can be reached by clicking on [this li
     make all
     ```
 
-9. Launch the app:
+9. OPTIONAL STEP. If you want to run unit tests on the code in the webapp directory before running it, type the following in your command line:
+
+    ```
+    cd webapp/tests
+    pytest
+    cd ../..
+    ```
+
+10. Launch the app:
 
     ```
     python webapp/turnover.py
     ```
 
 You can then go to the IP address where the app is running and use the app.
-
-
-## Repository structure
-There are 3 main directories in this repository:
-* develop: it contains Python scripts to set up the relational database and fit the model;
-* webapp: it contains Python scripts, HTML files and CSS files to develop the app;
-* sphinx: it contains all the files relative to the Sphinx documentation. 
