@@ -155,6 +155,27 @@ displayed in the results page.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="functions.increase_satisfaction">
+<code class="descclassname">functions.</code><code class="descname">increase_satisfaction</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.increase_satisfaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify data to study effect of increase in satisfaction on
+probability of quitting.</p>
+<p>This is a support function for the give_recommendation function.
+It takes the output of preprocess_prediction_form_data as input.
+It modifies the preprocessed data by increasing the satisfaction
+of our employee of interest by 1/10 of a point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – Form data after preprocessing.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Data in the same format as the input, but with different values.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="functions.make_predictions">
 <code class="descclassname">functions.</code><code class="descname">make_predictions</code><span class="sig-paren">(</span><em>dbtable</em>, <em>model</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.make_predictions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict probability of quitting of all employees in evaluation.</p>
@@ -223,6 +244,27 @@ model and used for prediction.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list with the data read from the form.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="functions.reduce_workload">
+<code class="descclassname">functions.</code><code class="descname">reduce_workload</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.reduce_workload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify data to study effect of reducing the workload on
+probability of quitting.</p>
+<p>This is a support function for the give_recommendation function.
+It takes the output of preprocess_prediction_form_data as input.
+It modifies the preprocessed data by reducing by 10% the number of
+hours worked per month by our employee of interest.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – Form data after preprocessing.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Data in the same format as the input, but with different values.</td>
 </tr>
 </tbody>
 </table>

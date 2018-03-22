@@ -39,6 +39,7 @@ def read_prediction_form_data(form):
     Returns:
         list: A list with the data read from the form.
     """
+    #read the data
     entry1 = form.satisfaction.data
     entry2 = form.evaluation.data
     entry3 = form.projects.data
@@ -48,7 +49,7 @@ def read_prediction_form_data(form):
     entry7 = form.promotion.data
     entry8 = form.department.data
     entry9 = form.salary.data
-
+    #store the data in a list
     data = [entry1, entry2, entry3, entry4, entry5,
             int(entry6), int(entry7), entry8, entry9]
     return data
@@ -82,8 +83,7 @@ def preprocess_prediction_form_data(form_data):
     # notice that the form was setup in a way that form.department.data
     # and form.salary.data
     # are equal to the position of the list that needs to be set equal
-    # to 1 based on the value chosen
-    # by the user in the form
+    # to 1 based on the value chosen by the user in the form
     # can use values in entry8 and entry 9 to change the relevant dummy to 1!
     # Accounting is the reference category, so no dummy for it ==> the form
     # returns "drop" when user chooses accounting
@@ -171,10 +171,38 @@ def give_promotion(data):
     return data
 
 def increase_satisfaction(data):
+    """Modify data to study effect of increase in satisfaction on
+    probability of quitting.
+
+    This is a support function for the give_recommendation function.
+    It takes the output of preprocess_prediction_form_data as input.
+    It modifies the preprocessed data by increasing the satisfaction
+    of our employee of interest by 1/10 of a point.
+
+    Args:
+        data: Form data after preprocessing.
+
+    Returns:
+        Data in the same format as the input, but with different values.
+    """
     data[0][0] = min(1, data[0][0] + 0.1)
     return data
 
 def reduce_workload(data):
+    """Modify data to study effect of reducing the workload on
+    probability of quitting.
+
+    This is a support function for the give_recommendation function.
+    It takes the output of preprocess_prediction_form_data as input.
+    It modifies the preprocessed data by reducing by 10% the number of 
+    hours worked per month by our employee of interest.
+
+    Args:
+        data: Form data after preprocessing.
+
+    Returns:
+        Data in the same format as the input, but with different values.
+    """
     data[0][3] = int(data[0][0]*0.9)
     return data
 
@@ -212,6 +240,10 @@ def give_recommendation(proba, model, data):
         y_hat_work = model.predict_proba(reduce_workload(data))[0][1]
         y_hat_work = round(y_hat_work*100, 2)
 
+        # only report a suggestion if it actually decreases the probability
+        # of quitting!!
+        # to allow us to format the output in the html nicely, we need a
+        # dictionary that stores text and predicted probability separately
         if proba > y_hat_promotion:
             y_hat_promotion = str(y_hat_promotion) + '%'
             text += [{'words': '''Offering a promotion; this would lower
@@ -229,6 +261,7 @@ def give_recommendation(proba, model, data):
             this would lower the probability of quitting to ''', 
             'num': y_hat_work}]
 
+    # if the model classifies as non-quitter
     else:
         text = ["""It is unlikely that this employee will quit. No action
                 needs to be taken."""]
