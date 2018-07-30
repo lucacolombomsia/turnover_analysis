@@ -28,6 +28,7 @@ develop/tests/.pytest_cache/
 
 #secrets
 turnover.env
+turnover_AWS.env
 
 #Jupyter NB files
 .ipynb_checkpoints/
