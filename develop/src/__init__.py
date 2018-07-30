@@ -52,6 +52,6 @@ def preprocess_for_sklearn(data):
     # it's the name of the employee and it has to be dropped
     try:
         data = data.drop(["name"], axis=1)
-    except ValueError:
+    except (ValueError, KeyError) as e:
         pass
     return data
