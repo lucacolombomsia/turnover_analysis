@@ -16,8 +16,6 @@ The final goal of this project is to enable HR professionals and team managers t
 
 **Success criteria**: The model should be able to predict the probability that an employee will quit with a satisfactory level of accuracy (more than 90%) and recall (more than 85%).
 
-The pivotal tracker page for this project can be reached by clicking on [this link](https://www.pivotaltracker.com/n/projects/2142055)
-
 
 ## Package requirements
 * [Flask](http://flask.pocoo.org/docs/0.12/). Flask is a microframework for web development in Python.
