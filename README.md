@@ -1,9 +1,7 @@
 # Turnover Analysis
-
-*MSiA 493: Analytics Value Chain - Team 10*   
-**Developer**: Luca Colombo   
-**QA**: Tucker Lewis   
-**PO**: Ethel Zhang   
+ 
+**Developer: Luca Colombo**   
+The Turnover Analysis is currently deployed on AWS and can be found [here](http://ec2-18-208-184-248.compute-1.amazonaws.com:5000)
 
 
 ## Project Charter
