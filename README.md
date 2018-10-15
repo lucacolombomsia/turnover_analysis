@@ -1,7 +1,7 @@
 # Turnover Analysis
  
 **Developer: Luca Colombo**   
-The Turnover Analysis is currently deployed on AWS and can be found [here](http://ec2-18-208-184-248.compute-1.amazonaws.com:5000)
+*The Turnover Analysis web application is currently deployed on AWS and can be found [here](http://ec2-18-208-184-248.compute-1.amazonaws.com:5000)*
 
 
 ## Project Charter
